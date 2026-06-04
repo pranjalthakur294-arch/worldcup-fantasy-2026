@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIFA World Cup 2026 Fantasy — Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --wc-red: #C8102E;
+      --wc-gold: #F5A623;
+      --wc-navy: #001B48;
+      --wc-navy-mid: #012A72;
+      --wc-navy-light: #0A3D91;
+      --wc-teal: #00B4D8;
+      --wc-teal-bright: #00E5FF;
+      --wc-white: #FFFFFF;
+      --wc-gray: #8A9BB8;
+      --surface-1: #001230;
+      --surface-2: #011845;
+      --surface-3: #012060;
+      --surface-4: #0A2878;
+      --panel-border: rgba(0,180,216,0.2);
+      --font-display: 'Barlow Condensed', sans-serif;
+      --font-body: 'Barlow', sans-serif;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    html, body {
+      min-height: 100vh;
+      font-family: var(--font-body);
+      background: var(--surface-1);
+      color: var(--wc-white);
+      overflow-x: hidden;
+    }
+
+    /* ── Background field pattern ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 60px,
+          rgba(0,180,216,0.03) 60px,
+          rgba(0,180,216,0.03) 61px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 60px,
+          rgba(0,180,216,0.03) 60px,
+          rgba(0,180,216,0.03) 61px
+        );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,100,200,0.18) 0%, transparent 70%),
+                  radial-gradient(ellipse 50% 40% at 80% 100%, rgba(0,180,216,0.1) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Layout ── */
+    .auth-wrapper {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* Left: branding panel */
+    .brand-panel {
+      flex: 1;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start;
+      padding: 60px 64px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-panel::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(1,42,114,0.6) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Decorative pitch circle behind branding */
+    .pitch-deco {
+      position: absolute;
+      right: -120px; top: 50%;
+      transform: translateY(-50%);
+      width: 500px; height: 500px;
+      border: 1px solid rgba(0,180,216,0.12);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .pitch-deco::before {
+      content: '';
+      position: absolute; inset: 40px;
+      border: 1px solid rgba(0,180,216,0.08);
+      border-radius: 50%;
+    }
+    .pitch-deco::after {
+      content: '';
+      position: absolute; inset: 100px;
+      border: 1px solid rgba(0,180,216,0.06);
+      border-radius: 50%;
+    }
+
+    .brand-content { position: relative; z-index: 1; }
+
+    .brand-logo {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 56px;
+    }
+    .logo-badge {
+      width: 52px; height: 52px;
+      background: var(--wc-red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 13px; font-weight: 900;
+      line-height: 1.1; text-align: center;
+      color: white;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 3px rgba(200,16,46,0.25);
+    }
+    .logo-text strong {
+      display: block;
+      font-family: var(--font-display);
+      font-weight: 800; font-size: 18px;
+      letter-spacing: 2px; text-transform: uppercase;
+    }
+    .logo-text span {
+      font-size: 11px; color: var(--wc-gold);
+      letter-spacing: 3px; text-transform: uppercase; font-weight: 600;
+    }
+
+    .brand-headline {
+      font-family: var(--font-display);
+      font-size: 68px; font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .brand-headline .accent { color: var(--wc-gold); }
+    .brand-headline .teal   { color: var(--wc-teal-bright); }
+
+    .brand-sub {
+      font-size: 15px; color: var(--wc-gray);
+      line-height: 1.7; max-width: 380px;
+      margin-bottom: 48px;
+    }
+
+    .brand-stats { display: flex; gap: 40px; }
+    .bstat-num {
+      font-family: var(--font-display);
+      font-size: 32px; font-weight: 900;
+      color: var(--wc-teal-bright);
+    }
+    .bstat-lbl {
+      font-size: 11px; color: var(--wc-gray);
+      text-transform: uppercase; letter-spacing: 1.5px;
+      margin-top: 2px;
+    }
+
+    /* Right: auth card */
+    .auth-panel {
+      width: 480px; flex-shrink: 0;
+      background: rgba(1,24,69,0.95);
+      border-left: 1px solid var(--panel-border);
+      display: flex; flex-direction: column;
+      justify-content: center;
+      padding: 48px 40px;
+      backdrop-filter: blur(20px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-panel::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--wc-teal) 0%, var(--wc-teal-bright) 50%, var(--wc-gold) 100%);
+    }
+
+    /* ── Tabs ── */
+    .auth-tabs {
+      display: flex; gap: 0;
+      background: var(--surface-3);
+      border-radius: 8px; padding: 4px;
+      margin-bottom: 32px;
+    }
+    .auth-tab {
+      flex: 1; padding: 10px;
+      background: none; border: none;
+      color: var(--wc-gray);
+      font-family: var(--font-display);
+      font-size: 15px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 1px;
+      cursor: pointer; border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .auth-tab.active {
+      background: var(--surface-1);
+      color: var(--wc-white);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    /* ── Forms ── */
+    .auth-form { display: none; flex-direction: column; gap: 16px; }
+    .auth-form.active { display: flex; }
+
+    .form-title {
+      font-family: var(--font-display);
+      font-size: 26px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .form-sub { font-size: 13px; color: var(--wc-gray); margin-bottom: 8px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label {
+      font-size: 11px; font-weight: 700;
+      color: var(--wc-gray); letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .form-input {
+      background: var(--surface-3);
+      border: 1px solid rgba(0,180,216,0.2);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: white;
+      font-family: var(--font-body);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+    .form-input::placeholder { color: rgba(138,155,184,0.5); }
+    .form-input:focus {
+      border-color: var(--wc-teal);
+      box-shadow: 0 0 0 3px rgba(0,180,216,0.12);
+    }
+    .form-input.error { border-color: var(--wc-red); }
+    .form-input.success { border-color: #22C55E; }
+
+    /* OTP row */
+    .otp-row {
+      display: flex; gap: 8px; align-items: flex-end;
+    }
+    .otp-row .form-input { flex: 1; letter-spacing: 6px; font-size: 18px; font-weight: 700; text-align: center; font-family: var(--font-display); }
+    .send-otp-btn {
+      white-space: nowrap; flex-shrink: 0;
+      background: var(--surface-4);
+      border: 1px solid var(--panel-border);
+      border-radius: 8px; padding: 12px 16px;
+      color: var(--wc-teal); font-family: var(--font-body);
+      font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .send-otp-btn:hover:not(:disabled) { background: rgba(0,180,216,0.1); border-color: var(--wc-teal); }
+    .send-otp-btn:disabled { color: var(--wc-gray); cursor: not-allowed; opacity: 0.6; }
+
+    .otp-hint {
+      font-size: 11px; color: var(--wc-gray);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .otp-hint .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--wc-teal); flex-shrink: 0;
+      animation: pulse-dot 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.7)} }
+
+    /* Password field with toggle */
+    .pwd-wrap { position: relative; }
+    .pwd-wrap .form-input { padding-right: 44px; }
+    .pwd-toggle {
+      position: absolute; right: 12px; top: 50%;
+      transform: translateY(-50%);
+      background: none; border: none;
+      color: var(--wc-gray); cursor: pointer;
+      font-size: 16px; padding: 4px;
+      transition: color 0.15s;
+    }
+    .pwd-toggle:hover { color: var(--wc-teal); }
+
+    /* Team name field */
+    .team-name-wrap { position: relative; }
+    .team-name-wrap .prefix {
+      position: absolute; left: 14px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px; pointer-events: none;
+    }
+    .team-name-wrap .form-input { padding-left: 38px; }
+
+    /* CTA button */
+    .auth-btn {
+      background: linear-gradient(135deg, var(--wc-teal) 0%, var(--wc-teal-bright) 100%);
+      color: var(--wc-navy);
+      border: none; border-radius: 8px;
+      padding: 14px;
+      font-family: var(--font-display);
+      font-size: 18px; font-weight: 900;
+      letter-spacing: 1px; text-transform: uppercase;
+      cursor: pointer; transition: all 0.2s;
+      width: 100%;
+      position: relative; overflow: hidden;
+    }
+    .auth-btn::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(255,255,255,0);
+      transition: background 0.2s;
+    }
+    .auth-btn:hover::after { background: rgba(255,255,255,0.1); }
+    .auth-btn:active { transform: scale(0.99); }
+    .auth-btn:disabled {
+      opacity: 0.5; cursor: not-allowed;
+    }
+    .auth-btn .btn-spinner {
+      display: inline-block; width: 16px; height: 16px;
+      border: 2px solid rgba(0,27,72,0.3);
+      border-top-color: var(--wc-navy);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle; margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Divider */
+    .auth-divider {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 11px; color: var(--wc-gray); font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: ''; flex: 1;
+      height: 1px; background: rgba(255,255,255,0.08);
+    }
+
+    /* Google button */
+    .google-btn {
+      background: var(--surface-3);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; padding: 12px 16px;
+      color: var(--wc-white);
+      font-family: var(--font-body);
+      font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%;
+    }
+    .google-btn:hover {
+      background: var(--surface-4);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .google-icon {
+      width: 20px; height: 20px;
+      flex-shrink: 0;
+    }
+
+    /* Terms / links */
+    .auth-terms {
+      font-size: 11px; color: var(--wc-gray);
+      text-align: center; line-height: 1.6;
+    }
+    .auth-terms a { color: var(--wc-teal); text-decoration: none; }
+    .auth-terms a:hover { text-decoration: underline; }
+
+    .forgot-link {
+      font-size: 12px; color: var(--wc-teal);
+      text-decoration: none; text-align: right;
+      display: block; margin-top: -8px;
+      transition: opacity 0.15s;
+    }
+    .forgot-link:hover { opacity: 0.8; text-decoration: underline; }
+
+    /* Error/success message */
+    .form-message {
+      font-size: 12px; padding: 10px 14px;
+      border-radius: 6px; font-weight: 600;
+      display: none;
+    }
+    .form-message.error  { background: rgba(200,16,46,0.15);  color: #FF6B7A; border: 1px solid rgba(200,16,46,0.3); }
+    .form-message.success{ background: rgba(34,197,94,0.12); color: #4ADE80;  border: 1px solid rgba(34,197,94,0.3); display:flex; align-items:center; gap:8px; }
+    .form-message.show   { display: flex; align-items: center; gap: 8px; }
+
+    /* Password strength */
+    .pwd-strength { display: flex; gap: 4px; margin-top: 6px; }
+    .pwd-bar {
+      flex: 1; height: 3px; border-radius: 2px;
+      background: var(--surface-4);
+      transition: background 0.3s;
+    }
+    .pwd-bar.weak   { background: var(--wc-red); }
+    .pwd-bar.medium { background: var(--wc-gold); }
+    .pwd-bar.strong { background: #22C55E; }
+    .pwd-strength-label {
+      font-size: 10px; color: var(--wc-gray);
+      margin-top: 4px; font-weight: 600;
+    }
+
+    /* Step indicator for signup */
+    .step-indicator {
+      display: flex; gap: 8px; align-items: center;
+      margin-bottom: 20px;
+    }
+    .step-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--surface-4); transition: all 0.3s;
+    }
+    .step-dot.active { background: var(--wc-teal-bright); transform: scale(1.3); }
+    .step-dot.done   { background: #22C55E; }
+    .step-label {
+      font-size: 11px; color: var(--wc-gray);
+      font-weight: 600; letter-spacing: 0.5px;
+      margin-left: 4px;
+    }
+
+    /* Success screen */
+    .success-screen {
+      display: none; flex-direction: column;
+      align-items: center; text-align: center; gap: 16px;
+    }
+    .success-screen.active { display: flex; }
+    .success-trophy {
+      font-size: 64px;
+      animation: trophy-in 0.6s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes trophy-in {
+      from { transform: scale(0) rotate(-20deg); opacity: 0; }
+      to   { transform: scale(1) rotate(0);       opacity: 1; }
+    }
+    .success-title {
+      font-family: var(--font-display);
+      font-size: 28px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .success-sub { font-size: 13px; color: var(--wc-gray); line-height: 1.6; }
+    .success-redirect {
+      font-size: 12px; color: var(--wc-gray);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .redirect-bar-wrap {
+      width: 120px; height: 3px; background: var(--surface-3); border-radius: 2px; overflow: hidden;
+    }
+    .redirect-bar {
+      height: 100%; background: var(--wc-teal-bright); border-radius: 2px;
+      width: 0%; animation: redirect-fill 3s linear forwards;
+    }
+    @keyframes redirect-fill { to { width: 100%; } }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--wc-teal); color: var(--wc-navy);
+      border-radius: 24px; padding: 11px 24px;
+      font-weight: 700; font-size: 13px;
+      z-index: 9999; transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+      white-space: nowrap; pointer-events: none;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .brand-panel { display: none; }
+      .auth-panel { width: 100%; border-left: none; padding: 36px 24px; min-height: 100vh; }
+      .auth-panel::before { height: 4px; }
+    }
+    @media (max-width: 480px) {
+      .auth-panel { padding: 28px 18px; }
+      .brand-headline { font-size: 48px; }
+    }
+
+    /* Slide transitions */
+    .slide-enter { animation: slideIn 0.3s ease both; }
+    .slide-exit  { animation: slideOut 0.2s ease both; }
+    @keyframes slideIn  { from{opacity:0;transform:translateX(18px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes slideOut { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(-18px)} }
+
+    /* Floating particles */
+    .particle {
+      position: fixed; pointer-events: none; z-index: 0;
+      width: 3px; height: 3px; border-radius: 50%;
+      background: var(--wc-teal);
+      opacity: 0;
+      animation: float-particle var(--dur) ease-in infinite;
+      animation-delay: var(--delay);
+      left: var(--x); top: var(--y);
+    }
+    @keyframes float-particle {
+      0%   { opacity: 0; transform: translateY(0) scale(1); }
+      10%  { opacity: 0.4; }
+      90%  { opacity: 0.2; }
+      100% { opacity: 0; transform: translateY(-120px) scale(0); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Particles -->
+<div id="particles"></div>
+
+<div class="auth-wrapper">
+
+  <!-- ── Left brand panel ── -->
+  <div class="brand-panel">
+    <div class="pitch-deco"></div>
+    <div class="brand-content">
+      <div class="brand-logo">
+        <div class="logo-badge">⚽<br>FIFA</div>
+        <div class="logo-text">
+          <strong>World Cup</strong>
+          <span>Fantasy 2026</span>
+        </div>
+      </div>
+
+      <h1 class="brand-headline">
+        Build Your<br>
+        <span class="accent">Dream</span><br>
+        <span class="teal">Squad</span>
+      </h1>
+      <p class="brand-sub">
+        Pick 15 players from 48 nations, score points across 64 matches,
+        and compete with 2.4 million managers worldwide.
+      </p>
+      <div class="brand-stats">
+        <div>
+          <div class="bstat-num">2.4M</div>
+          <div class="bstat-lbl">Managers</div>
+        </div>
+        <div>
+          <div class="bstat-num">$1M</div>
+          <div class="bstat-lbl">Prize Pool</div>
+        </div>
+        <div>
+          <div class="bstat-num">64</div>
+          <div class="bstat-lbl">Matches</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Right auth panel ── -->
+  <div class="auth-panel">
+
+    <!-- Tabs -->
+    <div class="auth-tabs" id="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+      <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+
+    <!-- ═══ LOGIN FORM ═══ -->
+    <div class="auth-form active" id="form-login">
+      <div class="form-title">Welcome Back</div>
+      <div class="form-sub">Sign in to manage your squad</div>
+
+      <div class="form-message" id="login-msg"></div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" id="login-email" type="email" placeholder="you@example.com" autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="pwd-wrap">
+          <input class="form-input" id="login-pwd" type="password" placeholder="••••••••" autocomplete="current-password">
+          <button class="pwd-toggle" onclick="togglePwd('login-pwd', this)" tabindex="-1">👁</button>
+        </div>
+        <a href="#" class="forgot-link" onclick="showForgot(event)">Forgot password?</a>
+      </div>
+
+      <button class="auth-btn" id="login-btn" onclick="doLogin()">Sign In</button>
+
+      <div class="auth-divider">or continue with</div>
+
+      <button class="google-btn" onclick="doGoogle()">
+        <svg class="google-icon" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Sign in with Google
+      </button>
+
+      <div class="auth-terms">
+        Don't have an account?
+        <a href="#" onclick="switchTab('signup');return false">Create one free →</a>
+      </div>
+    </div><!-- /login -->
+
+
+    <!-- ═══ SIGNUP FORM — STEP 1: Details ═══ -->
+    <div class="auth-form" id="form-signup-1">
+      <div class="step-indicator">
+        <div class="step-dot active" id="sdot-1"></div>
+        <div class="step-dot" id="sdot-2"></div>
+        <div class="step-dot" id="sdot-3"></div>
+        <span class="step-label">Step 1 of 3 — Your Details</span>
+      </div>
+
+      <div class="form-title">Create Account</div>
+      <div class="form-sub">Join 2.4M managers in the world's biggest fantasy game</div>
+
+      <div class="form-message" id="s1-msg"></div>
+
+      <div style="display:flex;gap:12px">
+        <div class="form-group" style="flex:1">
+          <label class="form-label">First Name</label>
+          <input class="form-input" id="s1-fname" type="text" placeholder="Lionel">
+        </div>
+        <div class="form-group" style="flex:1">
+          <label class="form-label">Last Name</label>
+          <input class="form-input" id="s1-lname" type="text" placeholder="Messi">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" id="s1-email" type="email" placeholder="you@example.com">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Team Name</label>
+        <div class="team-name-wrap">
+          <span class="prefix">⚽</span>
+          <input class="form-input" id="s1-team" type="text" placeholder="My Fantasy XI" maxlength="30">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="pwd-wrap">
+          <input class="form-input" id="s1-pwd" type="password" placeholder="Min 8 characters" oninput="checkStrength(this.value)">
+          <button class="pwd-toggle" onclick="togglePwd('s1-pwd', this)" tabindex="-1">👁</button>
+        </div>
+        <div class="pwd-strength" id="pwd-strength-bars">
+          <div class="pwd-bar" id="pbar-1"></div>
+          <div class="pwd-bar" id="pbar-2"></div>
+          <div class="pwd-bar" id="pbar-3"></div>
+          <div class="pwd-bar" id="pbar-4"></div>
+        </div>
+        <div class="pwd-strength-label" id="pwd-strength-label"></div>
+      </div>
+
+      <button class="auth-btn" onclick="goToStep2()">Continue →</button>
+
+      <div class="auth-divider">or</div>
+
+      <button class="google-btn" onclick="doGoogle()">
+        <svg class="google-icon" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Sign up with Google
+      </button>
+
+      <div class="auth-terms">
+        Already have an account?
+        <a href="#" onclick="switchTab('login');return false">Sign in →</a>
+      </div>
+    </div><!-- /signup-1 -->
+
+
+    <!-- ═══ SIGNUP FORM — STEP 2: OTP ═══ -->
+    <div class="auth-form" id="form-signup-2">
+      <div class="step-indicator">
+        <div class="step-dot done"></div>
+        <div class="step-dot active" id="sdot-2b"></div>
+        <div class="step-dot" id="sdot-3b"></div>
+        <span class="step-label">Step 2 of 3 — Verify Email</span>
+      </div>
+
+      <div class="form-title">Check Your Inbox</div>
+      <div class="form-sub" id="otp-hint-text">
+        We've sent a 6-digit code to <strong id="otp-email-display" style="color:var(--wc-teal)">—</strong>
+      </div>
+
+      <div class="form-message" id="s2-msg"></div>
+
+      <div class="form-group">
+        <label class="form-label">6-Digit OTP Code</label>
+        <div class="otp-row">
+          <input class="form-input" id="otp-input" type="text" placeholder="— — — — — —"
+            maxlength="6" inputmode="numeric" pattern="[0-9]*"
+            oninput="this.value=this.value.replace(/\D/g,'').slice(0,6); onOtpInput(this.value)">
+          <button class="send-otp-btn" id="resend-otp-btn" onclick="resendOTP()">Resend</button>
+        </div>
+        <div class="otp-hint" id="otp-status-hint" style="display:none">
+          <div class="dot"></div>
+          <span id="otp-status-text">OTP sent — check your email</span>
+        </div>
+      </div>
+
+      <!-- Demo hint -->
+      <div style="background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.25);border-radius:6px;padding:10px 14px;font-size:11px;color:var(--wc-gold);line-height:1.6">
+        <strong>Demo mode:</strong> OTP is <strong id="demo-otp-display" style="font-family:var(--font-display);font-size:14px;letter-spacing:2px">——</strong>
+        — In production, wire this to your email provider (SendGrid, Resend, etc.)
+      </div>
+
+      <button class="auth-btn" id="verify-btn" onclick="verifyOTP()" disabled>Verify & Continue →</button>
+
+      <button style="background:none;border:none;color:var(--wc-gray);font-size:12px;cursor:pointer;text-align:center;padding:4px" onclick="goToStep1()">← Back to details</button>
+    </div><!-- /signup-2 -->
+
+
+    <!-- ═══ SIGNUP FORM — STEP 3: Preferences ═══ -->
+    <div class="auth-form" id="form-signup-3">
+      <div class="step-indicator">
+        <div class="step-dot done"></div>
+        <div class="step-dot done"></div>
+        <div class="step-dot active"></div>
+        <span class="step-label">Step 3 of 3 — Almost done!</span>
+      </div>
+
+      <div class="form-title">One Last Thing</div>
+      <div class="form-sub">Tell us your favourite team (optional)</div>
+
+      <div class="form-message" id="s3-msg"></div>
+
+      <div class="form-group">
+        <label class="form-label">Favourite National Team</label>
+        <select class="form-input" id="s3-team" style="cursor:pointer">
+          <option value="">Select team (optional)</option>
+          <option>🇧🇷 Brazil</option><option>🇦🇷 Argentina</option><option>🇫🇷 France</option>
+          <option>🏴󠁧󠁢󠁥󠁮󠁧󠁿 England</option><option>🇩🇪 Germany</option><option>🇪🇸 Spain</option>
+          <option>🇵🇹 Portugal</option><option>🇳🇱 Netherlands</option><option>🇳🇴 Norway</option>
+          <option>🇮🇳 India</option><option>🇺🇸 USA</option><option>🇧🇪 Belgium</option>
+          <option>🇲🇦 Morocco</option><option>🇷🇸 Serbia</option><option>🇨🇦 Canada</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Notifications</label>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px">
+            <input type="checkbox" id="notif-scores" checked style="accent-color:var(--wc-teal);width:16px;height:16px">
+            Score updates &amp; player alerts
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px">
+            <input type="checkbox" id="notif-transfer" checked style="accent-color:var(--wc-teal);width:16px;height:16px">
+            Deadline &amp; transfer reminders
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px">
+            <input type="checkbox" id="notif-league" style="accent-color:var(--wc-teal);width:16px;height:16px">
+            League updates &amp; news
+          </label>
+        </div>
+      </div>
+
+      <button class="auth-btn" id="finish-btn" onclick="finishSignup()">
+        🏆 Create My Account
+      </button>
+
+      <div class="auth-terms">
+        By signing up you agree to our
+        <a href="#">Terms of Service</a> &amp; <a href="#">Privacy Policy</a>
+      </div>
+    </div><!-- /signup-3 -->
+
+
+    <!-- ═══ SUCCESS SCREEN ═══ -->
+    <div class="success-screen" id="success-screen">
+      <div class="success-trophy">🏆</div>
+      <div class="success-title">You're In!</div>
+      <div class="success-sub" id="success-sub">
+        Your account is ready. Time to build your dream squad!
+      </div>
+      <div class="success-redirect">
+        <div class="redirect-bar-wrap">
+          <div class="redirect-bar"></div>
+        </div>
+        Redirecting to your team...
+      </div>
+    </div>
+
+  </div><!-- /auth-panel -->
+</div><!-- /auth-wrapper -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================
+   STATE
+   ===================================================== */
+let signupData = {};
+let generatedOTP = '';
+let otpVerified = false;
+let otpResendTimer = null;
+
+/* =====================================================
+   TAB SWITCHING
+   ===================================================== */
+function switchTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach((t,i) => {
+    t.classList.toggle('active', (tab==='login'&&i===0)||(tab==='signup'&&i===1));
+  });
+  hideAll();
+  if (tab === 'login') {
+    show('form-login');
+  } else {
+    show('form-signup-1');
+  }
+}
+
+function hideAll() {
+  ['form-login','form-signup-1','form-signup-2','form-signup-3','success-screen']
+    .forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.classList.remove('active','slide-enter'); }
+    });
+}
+
+function show(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('active','slide-enter');
+}
+
+/* =====================================================
+   PASSWORD TOGGLE
+   ===================================================== */
+function togglePwd(inputId, btn) {
+  const inp = document.getElementById(inputId);
+  if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
+  else { inp.type = 'password'; btn.textContent = '👁'; }
+}
+
+/* =====================================================
+   PASSWORD STRENGTH
+   ===================================================== */
+function checkStrength(pwd) {
+  const bars  = [document.getElementById('pbar-1'),document.getElementById('pbar-2'),document.getElementById('pbar-3'),document.getElementById('pbar-4')];
+  const label = document.getElementById('pwd-strength-label');
+  bars.forEach(b => { b.className = 'pwd-bar'; });
+  if (!pwd) { label.textContent = ''; return; }
+  let score = 0;
+  if (pwd.length >= 8)  score++;
+  if (/[A-Z]/.test(pwd)) score++;
+  if (/[0-9]/.test(pwd)) score++;
+  if (/[^A-Za-z0-9]/.test(pwd)) score++;
+  const levels = ['','weak','medium','medium','strong'];
+  const labels = ['','Weak','Fair','Good','Strong 💪'];
+  for (let i = 0; i < score; i++) bars[i].className = 'pwd-bar ' + levels[score];
+  label.textContent = labels[score];
+  label.style.color = score <= 1 ? 'var(--wc-red)' : score <= 2 ? 'var(--wc-gold)' : '#22C55E';
+}
+
+/* =====================================================
+   LOGIN
+===================================================== */
+async function doLogin() {
+
+  const email = document.getElementById('login-email').value.trim();
+
+  const pwd = document.getElementById('login-pwd').value;
+
+  const msg = document.getElementById('login-msg');
+
+  const btn = document.getElementById('login-btn');
+
+  clearMsg(msg);
+
+  if (!email || !isValidEmail(email)) {
+
+    showMsg(msg, 'error', 'Please enter a valid email');
+
+    return;
+  }
+
+  if (!pwd) {
+
+    showMsg(msg, 'error', 'Please enter password');
+
+    return;
+  }
+
+  setLoading(btn, true);
+
+  try {
+
+    const response = await fetch(
+      'http://localhost:5000/api/auth/login',
+      {
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+          email,
+          password: pwd
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    setLoading(btn, false);
+
+    if (!response.ok) {
+
+      showMsg(msg, 'error', data.message || 'Login failed');
+
+      return;
+    }
+
+    // SAVE TOKEN
+    localStorage.setItem('wc2026_token', data.token);
+
+    // SAVE USER
+    localStorage.setItem(
+      'wc_user',
+      JSON.stringify(data.user)
+    );
+
+    showToast('✅ Login successful');
+
+    showSuccessScreen(data.user.username);
+
+  } catch (err) {
+
+    console.error(err);
+
+    setLoading(btn, false);
+
+    showMsg(msg, 'error', 'Server error');
+  }
+}
+/* =====================================================
+   SIGNUP — STEP 1
+   ===================================================== */
+function goToStep2() {
+  const fname = document.getElementById('s1-fname').value.trim();
+  const lname = document.getElementById('s1-lname').value.trim();
+  const email = document.getElementById('s1-email').value.trim();
+  const team  = document.getElementById('s1-team').value.trim();
+  const pwd   = document.getElementById('s1-pwd').value;
+  const msg   = document.getElementById('s1-msg');
+
+  clearMsg(msg);
+
+  if (!fname)                        { showMsg(msg,'error','Please enter your first name.');    return; }
+  if (!email || !isValidEmail(email)){ showMsg(msg,'error','Please enter a valid email.');      return; }
+  if (!team)                         { showMsg(msg,'error','Please give your team a name!');    return; }
+  if (pwd.length < 8)                { showMsg(msg,'error','Password must be at least 8 characters.'); return; }
+
+  signupData = { fname, lname, email, team, pwd };
+
+  // Generate mock OTP
+  generatedOTP = String(Math.floor(100000 + Math.random() * 900000));
+  document.getElementById('demo-otp-display').textContent = generatedOTP;
+  document.getElementById('otp-email-display').textContent = email;
+
+  // Show OTP sent indicator
+  const hint = document.getElementById('otp-status-hint');
+  hint.style.display = 'flex';
+  document.getElementById('otp-status-text').textContent = 'OTP sent — check your email';
+
+  showToast('📧 OTP sent to ' + email);
+
+  // TODO: POST /api/auth/send-otp  { email }
+
+  hideAll();
+  show('form-signup-2');
+  startResendTimer();
+}
+
+function goToStep1() {
+  hideAll();
+  show('form-signup-1');
+}
+
+/* =====================================================
+   SIGNUP — STEP 2: OTP VERIFY
+   ===================================================== */
+function onOtpInput(val) {
+  const btn = document.getElementById('verify-btn');
+  btn.disabled = val.length < 6;
+  const inp = document.getElementById('otp-input');
+  inp.classList.remove('error','success');
+  if (val.length === 6) inp.classList.add('success');
+}
+
+function verifyOTP() {
+  const entered = document.getElementById('otp-input').value.trim();
+  const msg     = document.getElementById('s2-msg');
+  const btn     = document.getElementById('verify-btn');
+  const inp     = document.getElementById('otp-input');
+
+  clearMsg(msg);
+
+  if (entered.length !== 6) { showMsg(msg,'error','Please enter the 6-digit OTP.'); return; }
+
+  setLoading(btn, true);
+
+  // TODO: POST /api/auth/verify-otp  { email, otp: entered }
+  setTimeout(() => {
+    setLoading(btn, false);
+    if (entered === generatedOTP) {
+      otpVerified = true;
+      inp.classList.add('success');
+      showMsg(msg,'success','✓ Email verified!');
+      clearResendTimer();
+      setTimeout(() => {
+        hideAll();
+        show('form-signup-3');
+      }, 700);
+    } else {
+      inp.classList.add('error');
+      showMsg(msg,'error','Incorrect OTP. Please check and try again.');
+      showToast('❌ Wrong OTP — try again');
+    }
+  }, 900);
+}
+
+function resendOTP() {
+  const btn = document.getElementById('resend-otp-btn');
+  if (btn.disabled) return;
+
+  generatedOTP = String(Math.floor(100000 + Math.random() * 900000));
+  document.getElementById('demo-otp-display').textContent = generatedOTP;
+  document.getElementById('otp-input').value = '';
+  document.getElementById('otp-input').classList.remove('error','success');
+  document.getElementById('verify-btn').disabled = true;
+  document.getElementById('otp-status-text').textContent = 'New OTP sent!';
+  document.getElementById('otp-status-hint').style.display = 'flex';
+
+  showToast('📧 New OTP sent!');
+  // TODO: POST /api/auth/send-otp  { email: signupData.email }
+  startResendTimer();
+}
+
+let resendSecs = 0;
+function startResendTimer() {
+  clearResendTimer();
+  resendSecs = 60;
+  const btn = document.getElementById('resend-otp-btn');
+  if (btn) { btn.disabled = true; btn.textContent = `Resend (${resendSecs}s)`; }
+  otpResendTimer = setInterval(() => {
+    resendSecs--;
+    const b = document.getElementById('resend-otp-btn');
+    if (!b) { clearResendTimer(); return; }
+    if (resendSecs <= 0) {
+      b.disabled = false; b.textContent = 'Resend';
+      clearResendTimer();
+    } else {
+      b.textContent = `Resend (${resendSecs}s)`;
+    }
+  }, 1000);
+}
+
+function clearResendTimer() {
+  if (otpResendTimer) { clearInterval(otpResendTimer); otpResendTimer = null; }
+}
+
+/* =====================================================
+   SIGNUP — STEP 3: Finish
+   ===================================================== */
+function finishSignup() {
+  const btn = document.getElementById('finish-btn');
+  const msg = document.getElementById('s3-msg');
+  clearMsg(msg);
+  setLoading(btn, true);
+
+  const favTeam   = document.getElementById('s3-team').value;
+  const notifScores   = document.getElementById('notif-scores').checked;
+  const notifTransfer = document.getElementById('notif-transfer').checked;
+  const notifLeague   = document.getElementById('notif-league').checked;
+
+  const fullData = {
+    ...signupData,
+    favTeam,
+    notifications: { scores: notifScores, transfers: notifTransfer, leagues: notifLeague },
+    squad: [],          // empty until team is built
+    createdAt: new Date().toISOString(),
+  };
+
+  // TODO: POST /api/auth/register  fullData  → returns { token, user }
+  setTimeout(() => {
+    setLoading(btn, false);
+    saveUserSession({ email: fullData.email, name: fullData.fname, teamName: fullData.team, squad: [] });
+    showSuccessScreen(fullData.fname);
+  }, 1400);
+}
+
+/* =====================================================
+   GOOGLE SIGN-IN
+   ===================================================== */
+function doGoogle() {
+  showToast('🔗 Redirecting to Google...');
+  // TODO: window.location.href = '/api/auth/google'
+  setTimeout(() => {
+    const mockUser = { email: 'user@gmail.com', name: 'Google User', teamName: 'Google XI', squad: [] };
+    saveUserSession(mockUser);
+    showSuccessScreen(mockUser.name);
+  }, 1600);
+}
+
+/* =====================================================
+   FORGOT PASSWORD
+   ===================================================== */
+function showForgot(e) {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value.trim();
+  if (!email || !isValidEmail(email)) {
+    showMsg(document.getElementById('login-msg'),'error','Enter your email above first, then click Forgot password.');
+    return;
+  }
+  showToast('📧 Reset link sent to ' + email);
+  // TODO: POST /api/auth/forgot-password  { email }
+}
+
+/* =====================================================
+   SESSION PERSISTENCE
+   Backend integration points:
+   - Replace saveUserSession with storing the JWT from your API response
+   - Replace loadUserSession with decoding the stored JWT
+   - Replace clearUserSession with calling POST /api/auth/logout
+   ===================================================== */
+function saveUserSession(user) {
+  // In production: store the JWT token returned by your backend
+  // e.g. localStorage.setItem('wc_token', response.token)
+  // Here we store user data directly (no real auth)
+  localStorage.setItem('wc2026_user', JSON.stringify(data.user));
+  localStorage.setItem('wc_squad', JSON.stringify(user.squad || []));
+}
+
+function loadUserSession() {
+  try { return JSON.parse(localStorage.getItem('wc_user')); } catch(e) { return null; }
+}
+
+function clearUserSession() {
+  localStorage.removeItem('wc_user');
+  localStorage.removeItem('wc_squad');
+}
+
+/* =====================================================
+   SQUAD PERSISTENCE HELPERS
+   Call these from your main app.js:
+   - saveSquad(squadArray)    when user saves team
+   - loadSquad()              on page load to restore squad
+   ===================================================== */
+function saveSquad(squad) {
+  localStorage.setItem('wc_squad', JSON.stringify(squad));
+  const user = loadUserSession();
+  if (user) { user.squad = squad; saveUserSession(user); }
+  // TODO: POST /api/team/save  { squad }  (with Authorization: Bearer <token>)
+}
+
+function loadSquad() {
+  try { return JSON.parse(localStorage.getItem('wc_squad')) || []; } catch(e) { return []; }
+}
+
+/* =====================================================
+   SUCCESS SCREEN
+   ===================================================== */
+function showSuccessScreen(name) {
+  document.getElementById('auth-tabs').style.display = 'none';
+  document.getElementById('success-sub').textContent =
+    `Welcome, ${name}! Your account is ready. Time to build your dream squad!`;
+  hideAll();
+  const ss = document.getElementById('success-screen');
+  ss.classList.add('active');
+  // Redirect after 3s
+ setTimeout(() => {
+
+  window.location.href = 'index.html';
+
+}, 3000);
+}
+
+/* =====================================================
+   UTILS
+   ===================================================== */
+function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+function showMsg(el, type, text) {
+  el.className = 'form-message ' + type + ' show';
+  el.textContent = text;
+}
+function clearMsg(el) { el.className = 'form-message'; el.textContent = ''; }
+
+function setLoading(btn, loading) {
+  if (loading) {
+    btn.disabled = true;
+    btn.dataset.orig = btn.innerHTML;
+    btn.innerHTML = '<span class="btn-spinner"></span> Please wait…';
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = btn.dataset.orig || btn.innerHTML;
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* =====================================================
+   PARTICLES
+   ===================================================== */
+(function spawnParticles() {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 18; i++) {
+    const d = document.createElement('div');
+    d.className = 'particle';
+    d.style.setProperty('--x', Math.random() * 100 + 'vw');
+    d.style.setProperty('--y', Math.random() * 100 + 'vh');
+    d.style.setProperty('--dur', (6 + Math.random() * 8) + 's');
+    d.style.setProperty('--delay', (Math.random() * 8) + 's');
+    container.appendChild(d);
+  }
+})();
+
+/* =====================================================
+   AUTO-RESTORE SESSION
+   ===================================================== */
+(function checkSession() {
+  const user = loadUserSession();
+  if (user) {
+    // User already logged in — show them the dashboard instead
+    // TODO: window.location.href = '/fantasy'
+    // For demo, just show a banner
+    showToast(`👋 Already signed in as ${user.name}`);
+  }
+})();
+</script>
+</body>
+</html>

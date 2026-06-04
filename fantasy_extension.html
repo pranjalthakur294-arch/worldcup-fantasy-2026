@@ -1,0 +1,1407 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIFA World Cup 2026 — Fantasy Extension</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+        --wc-red: #C8102E;
+        --wc-gold: #F5A623;
+        --wc-navy: #001B48;
+        --wc-navy-mid: #012A72;
+        --wc-navy-light: #0A3D91;
+        --wc-teal: #00B4D8;
+        --wc-teal-bright: #00E5FF;
+        --wc-green-dark: #1A5C38;
+        --wc-green-mid: #2E8B57;
+        --wc-white: #FFFFFF;
+        --wc-off-white: #F0F4FF;
+        --wc-gray: #8A9BB8;
+        --wc-gray-dark: #3A4A6B;
+        --surface-1: #001230;
+        --surface-2: #011845;
+        --surface-3: #012060;
+        --surface-4: #0A2878;
+        --panel-bg: rgba(1, 24, 69, 0.97);
+        --panel-border: rgba(0, 180, 216, 0.2);
+        --font-display: 'Barlow Condensed', sans-serif;
+        --font-body: 'Barlow', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; font-family: var(--font-body); background: var(--surface-1); color: var(--wc-white); overflow-x: hidden; }
+
+        .page { display: none; min-height: 100vh; flex-direction: column; }
+        .page.active { display: flex; }
+.lb-row.me{
+    border-left:4px solid var(--wc-teal-bright);
+    background:rgba(0,255,255,0.04);
+}
+        .topbar {
+        background: #000A1E; height: 36px;
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 0 24px; border-bottom: 1px solid rgba(255,255,255,0.06);
+        font-size: 12px; gap: 16px; flex-shrink: 0;
+        }
+        .topbar a { color: var(--wc-gray); text-decoration: none; }
+        .topbar-login {
+        display: flex; align-items: center; gap: 8px;
+        background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 20px; padding: 4px 14px; cursor: pointer;
+        font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
+        }
+
+        .navbar {
+        background: var(--wc-navy-mid); height: 56px;
+        display: flex; align-items: center; padding: 0 24px; gap: 0;
+        flex-shrink: 0; position: relative; z-index: 100;
+        }
+        .logo { display: flex; align-items: center; gap: 10px; margin-right: 32px; text-decoration: none; }
+        .logo-badge {
+        width: 38px; height: 38px; background: var(--wc-red); border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-family: var(--font-display); font-size: 11px; font-weight: 900;
+        letter-spacing: 0.5px; line-height: 1.1; text-align: center; color: white;
+        }
+        .logo-text strong { display: block; font-family: var(--font-display); font-weight: 800; font-size: 15px; letter-spacing: 1px; text-transform: uppercase; color: white; }
+        .logo-text span { font-size: 10px; color: var(--wc-gold); letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+        .nav-links { display: flex; align-items: center; gap: 2px; flex: 1; }
+        .nav-link {
+        color: rgba(255,255,255,0.75); text-decoration: none; font-size: 13px; font-weight: 600;
+        letter-spacing: 0.3px; padding: 0 14px; height: 56px; display: flex; align-items: center;
+        border-bottom: 3px solid transparent; transition: all 0.15s; white-space: nowrap; cursor: pointer;
+        }
+        .nav-link:hover { color: white; background: rgba(255,255,255,0.06); }
+        .nav-link.active-nav { color: white; border-bottom-color: var(--wc-teal-bright); }
+        .nav-pill {
+        background: var(--wc-teal-bright); color: var(--wc-navy) !important;
+        border-radius: 20px; padding: 6px 18px !important; height: auto !important;
+        border-bottom: none !important; font-weight: 700 !important; font-size: 13px !important;
+        }
+
+        .subheader {
+        background: var(--wc-navy-light); padding: 12px 24px;
+        display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+        }
+        .subheader-left { display: flex; align-items: center; gap: 12px; }
+        .breadcrumb { color: var(--wc-teal); font-size: 12px; cursor: pointer; }
+        .breadcrumb:hover { text-decoration: underline; }
+        .subheader h1 { font-family: var(--font-display); font-size: 22px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+        .subheader-right { font-size: 12px; color: var(--wc-gray); }
+
+        .toast {
+        position: fixed; bottom: 32px; left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: var(--wc-teal); color: var(--wc-navy);
+        border-radius: 24px; padding: 12px 28px;
+        font-weight: 700; font-size: 14px; z-index: 9999;
+        transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+        white-space: nowrap;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        .btn-primary {
+        background: var(--wc-teal-bright); color: var(--wc-navy);
+        border: none; border-radius: 28px; padding: 12px 36px;
+        font-family: var(--font-display); font-size: 16px; font-weight: 800;
+        letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; transition: all 0.2s;
+        }
+        .btn-primary:hover { background: #33ECFF; transform: scale(1.03); }
+        .btn-secondary {
+        background: transparent; color: var(--wc-teal);
+        border: 1px solid var(--wc-teal); border-radius: 28px; padding: 10px 28px;
+        font-family: var(--font-display); font-size: 15px; font-weight: 700;
+        letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; transition: all 0.2s;
+        }
+        .btn-secondary:hover { background: rgba(0,180,216,0.1); }
+
+        /* HUB */
+        .hub-page { flex: 1; padding: 32px 24px; max-width: 1100px; margin: 0 auto; width: 100%; }
+        .hub-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 24px; }
+        .hub-card {
+        background: var(--surface-2); border: 1px solid var(--panel-border);
+        border-radius: 10px; padding: 28px 24px; cursor: pointer;
+        transition: all 0.2s; position: relative; overflow: hidden;
+        }
+        .hub-card:hover { border-color: var(--wc-teal); transform: translateY(-3px); background: var(--surface-3); }
+        .hub-card .card-icon { font-size: 40px; margin-bottom: 16px; }
+        .hub-card h2 { font-family: var(--font-display); font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .hub-card p { font-size: 13px; color: var(--wc-gray); line-height: 1.6; margin-bottom: 20px; }
+        .hub-card .card-cta {
+        display: inline-block; background: var(--wc-teal); color: var(--wc-navy);
+        border-radius: 20px; padding: 7px 20px; font-family: var(--font-display);
+        font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .hub-card .badge {
+        position: absolute; top: 16px; right: 16px;
+        background: var(--wc-red); color: white; border-radius: 20px;
+        padding: 3px 10px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+        }
+        .hub-card .badge.live { background: #22C55E; animation: pulse 1.5s ease-in-out infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
+        /* LIVE */
+        .live-layout { flex: 1; display: flex; gap: 0; overflow: hidden; }
+        .live-left {
+        width: 320px; flex-shrink: 0; background: var(--surface-2);
+        border-right: 1px solid var(--panel-border); display: flex; flex-direction: column; overflow-y: auto;
+        }
+        .live-score-hero {
+        background: linear-gradient(135deg, var(--wc-navy-mid), var(--surface-3));
+        padding: 28px 24px; text-align: center; border-bottom: 1px solid var(--panel-border);
+        }
+        .live-score-hero .gw-label { font-size: 11px; color: var(--wc-gray); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+        .live-score-big { font-family: var(--font-display); font-size: 72px; font-weight: 900; line-height: 1; color: var(--wc-teal-bright); }
+        .live-score-hero .pts-label { font-size: 13px; color: var(--wc-gray); margin-top: 4px; }
+        .live-rank-row { display: flex; justify-content: space-around; padding: 16px 24px; border-bottom: 1px solid var(--panel-border); }
+        .live-rank-block { text-align: center; }
+        .live-rank-block .num { font-family: var(--font-display); font-size: 22px; font-weight: 900; }
+        .live-rank-block .lbl { font-size: 10px; color: var(--wc-gray); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+        .live-match-ticker { padding: 16px; border-bottom: 1px solid var(--panel-border); }
+        .ticker-title { font-size: 11px; font-weight: 700; color: var(--wc-gray); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; }
+        .match-card {
+        background: var(--surface-3); border-radius: 6px; padding: 10px 12px;
+        margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .match-teams { font-size: 12px; font-weight: 600; }
+        .match-score { font-family: var(--font-display); font-size: 16px; font-weight: 900; color: var(--wc-teal-bright); min-width: 40px; text-align: center; }
+        .match-status { font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .status-live { background: rgba(34,197,94,0.2); color: #22C55E; }
+        .status-ft { background: rgba(138,155,184,0.2); color: var(--wc-gray); }
+        .status-ns { background: rgba(245,166,35,0.2); color: var(--wc-gold); }
+        .live-right { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .live-table-header {
+        display: grid; grid-template-columns: 1fr 80px 60px 60px 60px 80px;
+        padding: 10px 16px; background: var(--surface-3); border-bottom: 1px solid var(--panel-border); flex-shrink: 0;
+        }
+        .live-table-header span { font-size: 10px; font-weight: 700; color: var(--wc-gray); letter-spacing: 0.5px; text-transform: uppercase; text-align: right; }
+        .live-table-header span:first-child { text-align: left; }
+        .live-players { flex: 1; overflow-y: auto; }
+        .live-players::-webkit-scrollbar { width: 4px; }
+        .live-players::-webkit-scrollbar-track { background: var(--surface-2); }
+        .live-players::-webkit-scrollbar-thumb { background: var(--surface-4); border-radius: 2px; }
+        .live-player-row {
+        display: grid; grid-template-columns: 1fr 80px 60px 60px 60px 80px;
+        padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.04);
+        align-items: center; transition: background 0.12s;
+        }
+        .live-player-row:hover { background: rgba(0,180,216,0.06); }
+        .live-player-row.captain-row { background: rgba(245,166,35,0.08); }
+        .live-player-row.bench-row { opacity: 0.55; }
+        .lpr-info { display: flex; align-items: center; gap: 10px; }
+        .lpr-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--surface-3); border: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+        .lpr-name { font-size: 13px; font-weight: 700; }
+        .lpr-sub { font-size: 10px; color: var(--wc-gray); }
+        .lpr-cap { display: inline-block; background: var(--wc-gold); color: var(--wc-navy); border-radius: 3px; padding: 0 4px; font-size: 9px; font-weight: 900; margin-left: 4px; }
+        .lpr-cell { font-size: 12px; text-align: right; color: var(--wc-off-white); }
+        .lpr-cell.pts-cell { font-family: var(--font-display); font-size: 18px; font-weight: 900; color: var(--wc-teal-bright); }
+        .lpr-cell.pts-cell.is-cap { color: var(--wc-gold); }
+        .points-breakdown { display: flex; gap: 4px; flex-wrap: wrap; }
+        .pb-chip { font-size: 9px; font-weight: 700; padding: 2px 5px; border-radius: 3px; background: rgba(0,180,216,0.15); color: var(--wc-teal); }
+        .pb-chip.goal { background: rgba(34,197,94,0.15); color: #22C55E; }
+        .pb-chip.assist { background: rgba(245,166,35,0.15); color: var(--wc-gold); }
+        .pb-chip.cs { background: rgba(0,229,255,0.15); color: var(--wc-teal-bright); }
+        .pb-chip.yc { background: rgba(245,166,35,0.3); color: var(--wc-gold); }
+        .section-divider { padding: 6px 16px; background: var(--surface-3); font-size: 10px; font-weight: 700; color: var(--wc-gray); letter-spacing: 1.5px; text-transform: uppercase; border-bottom: 1px solid var(--panel-border); }
+
+        /* GAMEWEEK */
+        .gw-page { flex: 1; padding: 24px; overflow-y: auto; }
+        .gw-content { max-width: 900px; margin: 0 auto; }
+        .gw-progress-card { background: var(--surface-2); border: 1px solid var(--panel-border); border-radius: 10px; padding: 24px; margin-bottom: 20px; }
+        .gw-progress-card h2 { font-family: var(--font-display); font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .gw-progress-card .gw-sub { font-size: 12px; color: var(--wc-gray); margin-bottom: 20px; }
+        .gw-timeline { display: flex; gap: 4px; margin-bottom: 12px; }
+        .gw-step { flex: 1; height: 8px; border-radius: 4px; background: var(--surface-4); position: relative; overflow: hidden; }
+        .gw-step.done { background: var(--wc-teal); }
+        .gw-step.active::after { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 60%; background: var(--wc-teal-bright); animation: progress-pulse 2s ease-in-out infinite; }
+        @keyframes progress-pulse { 0%,100%{width:55%} 50%{width:75%} }
+        .gw-steps-label { display: flex; justify-content: space-between; font-size: 10px; color: var(--wc-gray); }
+        .gw-stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+        .gw-stat { background: var(--surface-3); border-radius: 8px; padding: 16px; text-align: center; }
+        .gw-stat .val { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: var(--wc-teal-bright); }
+        .gw-stat .lbl { font-size: 10px; color: var(--wc-gray); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+        .lock-status-card { border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+        .lock-status-card.locked { background: rgba(200,16,46,0.12); border: 1px solid rgba(200,16,46,0.3); }
+        .lock-status-card.open { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); }
+        .lock-icon { font-size: 28px; flex-shrink: 0; }
+        .lock-info h3 { font-family: var(--font-display); font-size: 16px; font-weight: 800; text-transform: uppercase; }
+        .lock-info p { font-size: 12px; color: var(--wc-gray); margin-top: 2px; }
+        .lock-info .countdown { font-family: var(--font-display); font-size: 20px; font-weight: 900; color: var(--wc-gold); }
+        .gw-matches-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; }
+        .gw-match { background: var(--surface-2); border: 1px solid var(--panel-border); border-radius: 8px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; transition: border-color 0.2s; }
+        .gw-match:hover { border-color: rgba(0,180,216,0.4); }
+        .gw-match.gw-match-live { border-color: rgba(34,197,94,0.4); }
+        .gm-team { font-size: 13px; font-weight: 700; flex: 1; }
+        .gm-team.right { text-align: right; }
+        .gm-score { font-family: var(--font-display); font-size: 20px; font-weight: 900; min-width: 60px; text-align: center; color: var(--wc-teal-bright); }
+        .gm-time { font-size: 10px; color: var(--wc-gray); text-align: center; }
+        .gm-live { color: #22C55E; font-weight: 700; font-size: 10px; animation: pulse 1.5s ease-in-out infinite; }
+        .transfer-card { background: var(--surface-2); border: 1px solid var(--panel-border); border-radius: 10px; padding: 24px; margin-bottom: 20px; }
+        .transfer-card h3 { font-family: var(--font-display); font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+        .transfer-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .transfer-row:last-child { border-bottom: none; }
+        .transfer-out { flex: 1; display: flex; align-items: center; gap: 10px; }
+        .transfer-in  { flex: 1; display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+        .transfer-arrow { color: var(--wc-gray); font-size: 20px; flex-shrink: 0; }
+        .t-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--surface-3); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+        .t-name { font-size: 13px; font-weight: 700; }
+        .t-price { font-size: 11px; color: var(--wc-gold); }
+        .t-penalty { font-size: 11px; color: var(--wc-red); font-weight: 700; }
+        .chips-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+        .chip-card { flex: 1; min-width: 140px; background: var(--surface-3); border: 1px solid var(--panel-border); border-radius: 8px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .chip-card:hover { border-color: var(--wc-teal); background: var(--surface-4); }
+        .chip-card.used { opacity: 0.4; cursor: not-allowed; }
+        .chip-card .chip-name { font-family: var(--font-display); font-size: 16px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
+        .chip-card .chip-desc { font-size: 11px; color: var(--wc-gray); line-height: 1.4; }
+        .chip-card .chip-status { font-size: 10px; font-weight: 700; margin-top: 8px; color: #22C55E; }
+        .chip-card.used .chip-status { color: var(--wc-red); }
+
+        /* LEAGUES */
+        .leagues-layout { flex: 1; display: flex; overflow: hidden; }
+        .leagues-left { width: 340px; flex-shrink: 0; background: var(--surface-2); border-right: 1px solid var(--panel-border); display: flex; flex-direction: column; overflow: hidden; }
+        .leagues-right { flex: 1; overflow-y: auto; padding: 24px; }
+        .my-leagues-header { padding: 16px; border-bottom: 1px solid var(--panel-border); flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; }
+        .my-leagues-header h3 { font-family: var(--font-display); font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .create-btn { background: var(--wc-teal); color: var(--wc-navy); border: none; border-radius: 20px; padding: 6px 16px; font-family: var(--font-display); font-size: 13px; font-weight: 800; text-transform: uppercase; cursor: pointer; letter-spacing: 0.5px; }
+        .create-btn:hover { background: var(--wc-teal-bright); }
+        .league-list { flex: 1; overflow-y: auto; }
+        .league-list::-webkit-scrollbar { width: 4px; }
+        .league-list::-webkit-scrollbar-thumb { background: var(--surface-4); border-radius: 2px; }
+        .league-item { padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); cursor: pointer; transition: background 0.12s; display: flex; align-items: center; gap: 12px; }
+        .league-item:hover { background: rgba(0,180,216,0.07); }
+        .league-item.active-league { background: rgba(0,229,255,0.1); border-left: 3px solid var(--wc-teal-bright); }
+        .league-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+        .league-icon.global { background: rgba(0,180,216,0.2); }
+        .league-icon.private { background: rgba(245,166,35,0.2); }
+        .league-item-info { flex: 1; min-width: 0; }
+        .league-item-name { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .league-item-sub { font-size: 11px; color: var(--wc-gray); margin-top: 2px; }
+        .league-rank { text-align: right; }
+        .league-rank .rank-num { font-family: var(--font-display); font-size: 18px; font-weight: 900; color: var(--wc-teal-bright); }
+        .league-rank .rank-lbl { font-size: 9px; color: var(--wc-gray); text-transform: uppercase; }
+
+        /* Leaderboard */
+        .leaderboard-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+        .league-logo { width: 60px; height: 60px; border-radius: 10px; background: rgba(0,180,216,0.2); display: flex; align-items: center; justify-content: center; font-size: 28px; }
+        .leaderboard-header h2 { font-family: var(--font-display); font-size: 24px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .leaderboard-header p { font-size: 12px; color: var(--wc-gray); }
+        .lb-stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 20px; }
+        .lb-stat { background: var(--surface-2); border: 1px solid var(--panel-border); border-radius: 8px; padding: 14px; text-align: center; }
+        .lb-stat .val { font-family: var(--font-display); font-size: 24px; font-weight: 900; color: var(--wc-teal-bright); }
+        .lb-stat .lbl { font-size: 10px; color: var(--wc-gray); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+        .lb-table { background: var(--surface-2); border: 1px solid var(--panel-border); border-radius: 10px; overflow: hidden; }
+        .lb-row { display: grid; grid-template-columns: 44px 1fr 80px 80px 70px; padding: 11px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); align-items: center; transition: background 0.12s; }
+        .lb-row:last-child { border-bottom: none; }
+        .lb-row:hover { background: rgba(0,180,216,0.06); }
+        .lb-row.me { background: rgba(0,229,255,0.1); }
+        .lb-row.header-row { background: var(--surface-3); border-bottom: 1px solid var(--panel-border); font-size: 10px; font-weight: 700; color: var(--wc-gray); text-transform: uppercase; letter-spacing: 0.5px; }
+        .lb-rank { font-family: var(--font-display); font-size: 18px; font-weight: 900; text-align: center; }
+        .lb-rank.rank-1 { color: var(--wc-gold); }
+        .lb-rank.rank-2 { color: #C0C0C0; }
+        .lb-rank.rank-3 { color: #CD7F32; }
+        .lb-manager { display: flex; align-items: center; gap: 10px; }
+        .lb-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+        .lb-name { font-size: 13px; font-weight: 700; }
+        .lb-team-name { font-size: 10px; color: var(--wc-gray); }
+        .lb-cell { font-size: 13px; text-align: right; font-weight: 600; }
+        .lb-cell.pts { font-family: var(--font-display); font-size: 18px; font-weight: 900; color: var(--wc-teal-bright); text-align: right; }
+        .lb-cell.me-pts { color: var(--wc-gold); }
+        .lb-move { font-size: 12px; text-align: right; }
+        .lb-move.up { color: #22C55E; }
+        .lb-move.down { color: var(--wc-red); }
+        .lb-move.same { color: var(--wc-gray); }
+
+        /* Join/Create cards */
+        .league-actions { display: flex; gap: 12px; margin-bottom: 24px; }
+        .action-card { flex: 1; background: var(--surface-2); border: 1px solid var(--panel-border); border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .action-card:hover { border-color: var(--wc-teal); background: var(--surface-3); }
+        .action-card .action-icon { font-size: 32px; margin-bottom: 10px; }
+        .action-card h3 { font-family: var(--font-display); font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+        .action-card p { font-size: 12px; color: var(--wc-gray); line-height: 1.5; }
+
+        /* Inline panel for join/create */
+        .inline-panel {
+        background: var(--surface-2); border: 1px solid var(--panel-border);
+        border-radius: 10px; padding: 24px; margin-bottom: 20px;
+        animation: fadeSlide 0.2s ease;
+        }
+        @keyframes fadeSlide { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+        .inline-panel h3 { font-family: var(--font-display); font-size: 18px; font-weight: 800; text-transform: uppercase; margin-bottom: 16px; letter-spacing: 1px; }
+        .code-input-row { display: flex; gap: 10px; }
+        .code-input {
+        flex: 1; background: var(--surface-3); border: 1px solid var(--panel-border);
+        border-radius: 8px; padding: 12px 16px; color: white; font-family: var(--font-display);
+        font-size: 20px; font-weight: 800; letter-spacing: 4px; text-transform: uppercase;
+        outline: none; text-align: center;
+        }
+        .code-input:focus { border-color: var(--wc-teal); }
+        .code-input::placeholder { color: var(--wc-gray-dark); letter-spacing: 2px; font-size: 14px; font-family: var(--font-body); font-weight: 400; }
+        .text-input {
+        width: 100%; background: var(--surface-3); border: 1px solid var(--panel-border);
+        border-radius: 8px; padding: 12px 16px; color: white; font-family: var(--font-body);
+        font-size: 15px; outline: none; margin-bottom: 12px;
+        }
+        .text-input:focus { border-color: var(--wc-teal); }
+        .text-input::placeholder { color: var(--wc-gray); }
+
+        /* Code share card */
+        .your-code-card {
+        background: linear-gradient(135deg, var(--wc-navy-mid), var(--surface-3));
+        border: 1px solid var(--wc-teal); border-radius: 10px; padding: 20px;
+        display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+        }
+        .your-code-card h4 { font-size: 11px; color: var(--wc-gray); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+        .your-code { font-family: var(--font-display); font-size: 32px; font-weight: 900; letter-spacing: 6px; color: var(--wc-teal-bright); }
+        .copy-code-btn { background: var(--wc-teal); color: var(--wc-navy); border: none; border-radius: 20px; padding: 10px 22px; font-family: var(--font-display); font-size: 14px; font-weight: 800; text-transform: uppercase; cursor: pointer; letter-spacing: 0.5px; }
+        .copy-code-btn:hover { background: var(--wc-teal-bright); }
+
+        /* Empty state */
+        .empty-leagues {
+        padding: 48px 24px; text-align: center; color: var(--wc-gray);
+        }
+        .empty-leagues .empty-icon { font-size: 48px; margin-bottom: 16px; }
+        .empty-leagues h3 { font-family: var(--font-display); font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--wc-off-white); margin-bottom: 8px; }
+        .empty-leagues p { font-size: 13px; line-height: 1.6; }
+
+        /* Panel toggle btns */
+        .panel-close {
+        background: none; border: none; color: var(--wc-gray); cursor: pointer;
+        font-size: 18px; float: right; margin-top: -4px;
+        }
+        .panel-close:hover { color: white; }
+
+        @media (max-width: 900px) {
+        .hub-grid { grid-template-columns: 1fr; }
+        .gw-stats-row { grid-template-columns: repeat(2,1fr); }
+        .gw-matches-grid { grid-template-columns: 1fr; }
+        .leagues-left { width: 280px; }
+        .live-left { width: 260px; }
+        }
+        @media (max-width: 640px) {
+        .live-layout, .leagues-layout { flex-direction: column; }
+        .live-left, .leagues-left { width: 100%; }
+        .lb-row { grid-template-columns: 36px 1fr 60px 60px; }
+        }
+    </style>
+    </head>
+    <body>
+
+    <!-- HUB PAGE -->
+    <div id="page-hub" class="page active">
+    <div class="topbar">
+        <a href="#">FIFA.com</a>
+        <div class="topbar-login">Log in 👤</div>
+    </div>
+    <nav class="navbar">
+        <a class="logo" href="#">
+        <div class="logo-badge">⚽<br>FIFA</div>
+        <div class="logo-text"><strong>World Cup</strong><span>Fantasy 2026</span></div>
+        </a>
+        <div class="nav-links">
+        <span class="nav-link" onclick="showToast('Matches coming soon')">Matches</span>
+        <span class="nav-link" onclick="showToast('Table coming soon')">Table</span>
+        <span class="nav-link nav-pill">Fantasy ▾</span>
+        <span class="nav-link" onclick="showToast('Stats coming soon')">Stats</span>
+        </div>
+    </nav>
+    <div class="subheader">
+        <div class="subheader-left"><h1>Fantasy Football</h1></div>
+        <div class="subheader-right">FIFA World Cup 2026 · Matchday 3</div>
+    </div>
+    <div class="hub-page">
+        <div class="hub-grid">
+        <div class="hub-card" onclick="goToPage('live')">
+            <div class="badge live">● LIVE</div>
+            <div class="card-icon">📊</div>
+            <h2>Live Points</h2>
+            <p>Track your squad's points in real-time as matches unfold. See goals, assists, and bonuses as they happen.</p>
+            <span class="card-cta">View Points →</span>
+        </div>
+        <div class="hub-card" onclick="goToPage('gameweek')">
+            <div class="badge">GW3 ACTIVE</div>
+            <div class="card-icon">🗓️</div>
+            <h2>Gameweek</h2>
+            <p>Manage transfers, use chips, and track the matchday schedule. Transfers lock when the first match kicks off.</p>
+            <span class="card-cta">Manage GW →</span>
+        </div>
+        <div class="hub-card" onclick="goToPage('leagues')">
+            <div class="card-icon">🏆</div>
+            <h2>Leagues</h2>
+            <p>Compete against friends and players worldwide. Create a private league or join one with an invite code.</p>
+            <span class="card-cta">My Leagues →</span>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- LIVE POINTS PAGE -->
+    <div id="page-live" class="page">
+    <div class="topbar"><a href="#">FIFA.com</a><div class="topbar-login">Log in 👤</div></div>
+    <nav class="navbar">
+        <a class="logo" href="#" onclick="goToPage('hub');return false">
+        <div class="logo-badge">⚽<br>FIFA</div>
+        <div class="logo-text"><strong>World Cup</strong><span>Fantasy 2026</span></div>
+        </a>
+        <div class="nav-links">
+        <span class="nav-link" onclick="goToPage('hub')">← Fantasy Hub</span>
+        <span class="nav-link nav-pill active-nav">Live Points</span>
+        <span class="nav-link" onclick="goToPage('gameweek')">Gameweek</span>
+        <span class="nav-link" onclick="goToPage('leagues')">Leagues</span>
+        </div>
+    </nav>
+    <div class="subheader">
+        <div class="subheader-left">
+        <span class="breadcrumb" onclick="goToPage('hub')">← Fantasy Hub</span>
+        <h1>Live Points — GW3</h1>
+        </div>
+        <div class="subheader-right" style="display:flex;align-items:center;gap:8px">
+        <span style="width:8px;height:8px;border-radius:50%;background:#22C55E;animation:pulse 1.5s ease-in-out infinite;display:inline-block"></span>
+        Live updating
+        </div>
+    </div>
+    <div class="live-layout">
+        <div class="live-left">
+        <div class="live-score-hero">
+            <div class="gw-label">Gameweek 3 · My Team</div>
+            <div class="live-score-big" id="live-total-pts">--</div>
+            <div class="pts-label">points</div>
+        </div>
+        <div class="live-rank-row">
+            <div class="live-rank-block"><div class="num" style="color:var(--wc-teal-bright)" id="live-rank">--</div><div class="lbl">Overall Rank</div></div>
+            <div class="live-rank-block"><div class="num" style="color:var(--wc-gold)" id="live-avg">--</div><div class="lbl">GW Avg</div></div>
+            <div class="live-rank-block"><div class="num" id="live-playing">--</div><div class="lbl">Playing</div></div>
+        </div>
+        <div class="live-match-ticker">
+            <div class="ticker-title">Today's Matches</div>
+            <div id="match-ticker"></div>
+        </div>
+        </div>
+        <div class="live-right">
+        <div class="live-table-header">
+            <span>Player</span><span>Mins</span><span>Bonus</span><span>Events</span><span>Price</span><span>GW Pts</span>
+        </div>
+        <div class="live-players" id="live-players-list"></div>
+        </div>
+    </div>
+    </div>
+
+    <!-- GAMEWEEK PAGE -->
+    <div id="page-gameweek" class="page">
+    <div class="topbar"><a href="#">FIFA.com</a><div class="topbar-login">Log in 👤</div></div>
+    <nav class="navbar">
+        <a class="logo" href="#" onclick="goToPage('hub');return false">
+        <div class="logo-badge">⚽<br>FIFA</div>
+        <div class="logo-text"><strong>World Cup</strong><span>Fantasy 2026</span></div>
+        </a>
+        <div class="nav-links">
+        <span class="nav-link" onclick="goToPage('hub')">← Fantasy Hub</span>
+        <span class="nav-link" onclick="goToPage('live')">Live Points</span>
+        <span class="nav-link nav-pill active-nav">Gameweek</span>
+        <span class="nav-link" onclick="goToPage('leagues')">Leagues</span>
+        </div>
+    </nav>
+    <div class="subheader">
+        <div class="subheader-left">
+        <span class="breadcrumb" onclick="goToPage('hub')">← Fantasy Hub</span>
+        <h1>Gameweek 3</h1>
+        </div>
+        <div class="subheader-right">Group Stage · 15–20 Jun 2026</div>
+    </div>
+    <div class="gw-page">
+        <div class="gw-content">
+        <div class="gw-progress-card">
+            <h2>Group Stage Progress</h2>
+            <div class="gw-sub">Gameweek 3 of 6 — Group stage ends 25 Jun 2026</div>
+            <div class="gw-timeline" id="gw-timeline"></div>
+            <div class="gw-steps-label">
+            <span>GW1 · 12 Jun</span><span>GW2 · 14 Jun</span><span>GW3 · 16 Jun</span>
+            <span>GW4 · 18 Jun</span><span>GW5 · 20 Jun</span><span>GW6 · 25 Jun</span>
+            </div>
+        </div>
+        <div class="gw-stats-row">
+            <div class="gw-stat"><div class="val">74</div><div class="lbl">GW3 Pts</div></div>
+            <div class="gw-stat"><div class="val">218</div><div class="lbl">Total Pts</div></div>
+            <div class="gw-stat"><div class="val">52,104</div><div class="lbl">Overall Rank</div></div>
+            <div class="gw-stat"><div class="val">3</div><div class="lbl">Free Transfers</div></div>
+        </div>
+        <div class="lock-status-card open" id="lock-card">
+            <div class="lock-icon">🔓</div>
+            <div class="lock-info">
+            <h3>Transfers Open</h3>
+            <p>Transfers lock when the first GW4 match kicks off</p>
+            <div class="countdown" id="lock-countdown">02:14:38</div>
+            </div>
+            <button class="btn-primary" onclick="goToPage('hub'); showToast('Opening team editor…')">Make Transfers</button>
+        </div>
+        <div style="margin-bottom:12px">
+            <div style="font-size:11px;font-weight:700;color:var(--wc-gray);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px">GW3 Fixtures</div>
+            <div class="gw-matches-grid" id="gw-fixtures"></div>
+        </div>
+        <div class="transfer-card">
+            <h3>GW3 Transfers</h3>
+            <div id="transfer-history"></div>
+        </div>
+        <div style="margin-bottom:12px;font-size:11px;font-weight:700;color:var(--wc-gray);letter-spacing:1.5px;text-transform:uppercase">Chips</div>
+        <div class="chips-row">
+            <div class="chip-card" onclick="showToast('Wildcard activated! Rebuild your squad.')">
+            <div class="chip-name">🃏 Wildcard</div>
+            <div class="chip-desc">Unlimited free transfers for one gameweek</div>
+            <div class="chip-status">Available</div>
+            </div>
+            <div class="chip-card used">
+            <div class="chip-name">⚡ Triple Cap</div>
+            <div class="chip-desc">Triple your captain's score for one GW</div>
+            <div class="chip-status" style="color:var(--wc-red)">Used GW1</div>
+            </div>
+            <div class="chip-card" onclick="showToast('Bench Boost applied! All 15 score this GW.')">
+            <div class="chip-name">🚀 Bench Boost</div>
+            <div class="chip-desc">All 15 squad players score this GW</div>
+            <div class="chip-status">Available</div>
+            </div>
+            <div class="chip-card" onclick="showToast('Free Hit active — squad resets next GW.')">
+            <div class="chip-name">🎯 Free Hit</div>
+            <div class="chip-desc">Temporary squad overhaul for one GW only</div>
+            <div class="chip-status">Available</div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- LEAGUES PAGE -->
+    <div id="page-leagues" class="page">
+    <div class="topbar"><a href="#">FIFA.com</a><div class="topbar-login">Log in 👤</div></div>
+    <nav class="navbar">
+        <a class="logo" href="#" onclick="goToPage('hub');return false">
+        <div class="logo-badge">⚽<br>FIFA</div>
+        <div class="logo-text"><strong>World Cup</strong><span>Fantasy 2026</span></div>
+        </a>
+        <div class="nav-links">
+        <span class="nav-link" onclick="goToPage('hub')">← Fantasy Hub</span>
+        <span class="nav-link" onclick="goToPage('live')">Live Points</span>
+        <span class="nav-link" onclick="goToPage('gameweek')">Gameweek</span>
+        <span class="nav-link nav-pill active-nav">Leagues</span>
+        </div>
+    </nav>
+    <div class="subheader">
+        <div class="subheader-left">
+        <span class="breadcrumb" onclick="goToPage('hub')">← Fantasy Hub</span>
+        <h1>My Leagues</h1>
+        </div>
+    </div>
+    <div class="leagues-layout">
+        <div class="leagues-left">
+        <div class="my-leagues-header">
+            <h3>My Leagues</h3>
+            <button class="create-btn" onclick="openCreatePanel()">+ Create</button>
+        </div>
+        <div class="league-list" id="league-list"></div>
+        </div>
+        <div class="leagues-right" id="leagues-right"></div>
+    </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+    // =====================================================
+    // DATA
+    // =====================================================
+    const MY_SQUAD = [];
+
+    const GW_POINTS = {};
+
+    const MATCHES = [];
+
+    const GW_FIXTURES = [];
+
+    const TRANSFERS = [];
+
+    // =====================================================
+    // LEAGUES STATE (starts with just Overall)
+    // =====================================================
+    // Each league: { id, name, type, icon, members, myRank, myPts, code (private only), rows }
+
+    let activeLeagueId = 'overall';
+
+    const OVERALL_ROWS = [];
+    let myLeagues = [];
+    let leagueIdCounter = 1;
+    async function loadMyLeagues() {
+
+    const token =
+        localStorage.getItem('token') ||
+        localStorage.getItem('wc2026_token');
+
+    if (!token) return;
+
+    try {
+
+        const response = await fetch(
+            'http://localhost:5000/api/leagues/my',
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message);
+        }
+
+       myLeagues = result.data.leagues.map(league => ({
+    id: league.id,
+    name: league.name,
+    code: league.invite_code,
+    members: league.member_count,
+    type: 'private',
+    icon: '🏆',
+    rows: []
+}));
+
+if (!activeLeagueId && myLeagues.length > 0) {
+    activeLeagueId = myLeagues[0].id;
+}
+
+renderLeagueList();
+
+
+if (myLeagues.length > 0) {
+
+    // Keep current league if it exists
+    const exists = myLeagues.find(
+        l => l.id == activeLeagueId
+    );
+
+    if (!exists) {
+        activeLeagueId = myLeagues[0].id;
+    }
+
+    renderLeaderboard(activeLeagueId);
+}
+
+    } catch (err) {
+
+        console.error(err);
+
+        showToast('Failed to load leagues');
+    }
+}
+    function generateLeagueCode() {
+    return 'WC-' + Math.random().toString(36)
+        .substring(2, 6)
+        .toUpperCase();
+    }
+
+
+
+    // =====================================================
+    // LEAGUES RENDER
+    // =====================================================
+    function renderLeagueList() {
+    const list = document.getElementById('league-list');
+    if (myLeagues.length === 0) {
+
+    list.innerHTML = `
+    <div style="padding:20px">
+
+      <div class="action-card"
+        onclick="openCreatePanel()"
+        style="margin-bottom:14px">
+
+        <div class="action-icon">➕</div>
+        <h3>Create League</h3>
+        <p>Create a private league and invite friends</p>
+
+      </div>
+
+      <div class="action-card"
+        onclick="openJoinPanel()">
+
+        <div class="action-icon">🔗</div>
+        <h3>Join League</h3>
+        <p>Join using an invite code</p>
+
+      </div>
+
+    </div>
+
+
+    `;
+
+    document.getElementById('leagues-right').innerHTML = `
+
+      <div id="join-panel"
+        style="display:none"
+        class="inline-panel">
+
+        <h3>
+          Join with Invite Code
+
+          <button class="panel-close"
+            onclick="document.getElementById('join-panel').style.display='none'">
+            ✕
+          </button>
+        </h3>
+
+        <div class="code-input-row">
+
+          <input class="code-input"
+            id="invite-code-input"
+            placeholder="WC-XXXX"
+            maxlength="7">
+
+          <button class="btn-primary"
+            onclick="joinLeague()">
+
+            Join
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <div id="create-panel"
+        style="display:none"
+        class="inline-panel">
+
+        <h3>
+          Create a New League
+
+          <button class="panel-close"
+            onclick="document.getElementById('create-panel').style.display='none'">
+            ✕
+          </button>
+        </h3>
+
+        <input class="text-input"
+          id="new-league-name"
+          placeholder="League name">
+
+        <button class="btn-primary"
+          onclick="createLeague()"
+          style="width:100%">
+
+          Create League
+
+        </button>
+
+      </div>
+    `;
+
+    return;
+}
+    list.innerHTML = myLeagues.map(l => `
+<div class="league-item"
+onclick="selectLeague('${l.id}')">
+        <div class="league-icon private">🏆</div>
+
+        <div class="league-item-info">
+        <div class="league-item-name">${l.name}</div>
+
+        <div class="league-item-sub">
+            Code: ${l.code}
+        </div>
+        </div>
+
+        <div class="league-rank">
+        <div class="rank-num">${l.members}</div>
+        <div class="rank-lbl">members</div>
+        </div>
+
+    </div>
+    `).join('');
+    }
+
+    function selectLeague(id) {
+    activeLeagueId = id;
+    renderLeagueList();
+
+    renderLeaderboard(id);
+    }
+
+
+    async function renderLeaderboard(id) {
+    const league = myLeagues.find(
+    l => String(l.id) === String(id)
+);
+    if (!league) return;
+   const rows = await loadLeagueLeaderboard(id) || [];
+   const currentUserId = JSON.parse(
+    atob(
+        (
+            localStorage.getItem('token') ||
+            localStorage.getItem('wc2026_token')
+        ).split('.')[1]
+    )
+).id;
+
+const myRow = rows.find(
+    r => r.id === currentUserId
+);
+
+const myRank =
+    rows.findIndex(
+        r => r.id === currentUserId
+    ) + 1;
+
+const myPoints =
+    myRow?.total_points || 0;
+    const avatarColors = ['#0A3D91','#1A5C38','#8B1A1A','#4A1B8C','#7A4210','#0A5C5C','#3D0A91','#5C1A38'];
+
+    document.getElementById('leagues-right').innerHTML = `
+        <div class="leaderboard-header">
+        <div class="league-logo">${league.icon}</div>
+        <div>
+            <h2>${league.name}</h2>
+<p>${league.members} managers · Your rank:
+<strong style="color:var(--wc-teal-bright)">
+${myRank}
+</strong></p>
+        </div>
+        </div>
+
+        ${league.type === 'private' ? `
+        <div class="your-code-card">
+        <div>
+            <h4>Invite Code — share with friends to join</h4>
+            <div class="your-code">${league.code}</div>
+        </div>
+        <button class="copy-code-btn" onclick="copyCode('${league.code}')">Copy Code</button>
+        </div>` : ''}
+
+        <div class="lb-stats-row">
+        <div class="lb-stat"><div class="val">${league.members}</div><div class="lbl">Managers</div></div>
+        <div class="lb-stat">
+    <div class="val">
+        ${myRank}
+    </div>
+    <div class="lbl">Your Rank</div>
+</div>
+        <div class="lb-stat">
+    <div class="val">${myPoints}</div>
+    <div class="lbl">Your Points</div>
+</div>
+        </div>
+
+        <div class="lb-table">
+        <div class="lb-row header-row">
+            <span style="text-align:center">Rank</span>
+            <span>Manager</span>
+            <span style="text-align:right">Total</span>
+            <span style="text-align:right">GW Pts</span>
+            <span style="text-align:right">+/-</span>
+        </div>
+${rows.map((r, i) => {
+
+    const isMe =
+        r.id === currentUserId;
+
+    return `
+    <div class="lb-row ${isMe ? 'me' : ''}">
+
+    <div class="lb-rank">
+        ${i + 1}
+    </div>
+
+    <div class="lb-manager">
+
+        <div class="lb-avatar">
+            ${r.username.charAt(0).toUpperCase()}
+        </div>
+
+        <div>
+            <div class="lb-name">
+                ${r.username}
+            </div>
+
+            <div class="lb-team-name">
+                ${r.team_name || 'No Team'}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="lb-cell pts">
+        ${r.total_points}
+    </div>
+
+    <div class="lb-cell">
+        ${r.gw_points}
+    </div>
+
+    <div class="lb-move same">
+    0
+</div>
+
+</div>
+    `;
+}).join('')}
+        </div>
+
+        <div class="league-actions" style="margin-top:20px">
+        <div class="action-card" onclick="openJoinPanel()">
+            <div class="action-icon">🔗</div>
+            <h3>Join League</h3>
+            <p>Enter an invite code to join a friend's private league</p>
+        </div>
+        <div class="action-card" onclick="openCreatePanel()">
+            <div class="action-icon">➕</div>
+            <h3>Create League</h3>
+            <p>Start a new private league and invite your friends</p>
+        </div>
+        </div>
+
+        <div id="join-panel" style="display:none" class="inline-panel">
+        <h3>
+            Join with Invite Code
+            <button class="panel-close" onclick="document.getElementById('join-panel').style.display='none'">✕</button>
+        </h3>
+        <div class="code-input-row">
+            <input class="code-input" id="invite-code-input" placeholder="WC-XXXX" maxlength="7" oninput="this.value=this.value.toUpperCase()">
+            <button class="btn-primary" onclick="joinLeague()">Join</button>
+        </div>
+        <div style="font-size:11px;color:var(--wc-gray);margin-top:10px">Ask your friend to share their league's invite code with you.</div>
+        </div>
+
+        <div id="create-panel" style="display:none" class="inline-panel">
+        <h3>
+            Create a New League
+            <button class="panel-close" onclick="document.getElementById('create-panel').style.display='none'">✕</button>
+        </h3>
+        <input class="text-input" id="new-league-name" placeholder="League name (e.g. Office Rivals)" maxlength="32">
+        <button class="btn-primary" onclick="createLeague()" style="width:100%">Create League</button>
+        <div style="font-size:11px;color:var(--wc-gray);margin-top:10px">A unique invite code will be generated — share it with friends so they can join.</div>
+        </div>
+    `;
+    }
+
+    // =====================================================
+    // PANELS
+    // =====================================================
+    function openJoinPanel() {
+    const j = document.getElementById('join-panel');
+    const c = document.getElementById('create-panel');
+    if (c) c.style.display = 'none';
+    if (j) { j.style.display = j.style.display === 'none' ? 'block' : 'none'; }
+    }
+
+    function openCreatePanel() {
+    // Could be called from left sidebar button OR from the right panel button
+    const j = document.getElementById('join-panel');
+    const c = document.getElementById('create-panel');
+    if (j) j.style.display = 'none';
+    if (c) { c.style.display = c.style.display === 'none' ? 'block' : 'none'; }
+    else {
+        // Panel doesn't exist yet (called from sidebar), scroll right into view
+        selectLeague(activeLeagueId);
+        setTimeout(() => {
+        const cp = document.getElementById('create-panel');
+        if (cp) { cp.style.display = 'block'; cp.scrollIntoView({ behavior:'smooth' }); }
+        }, 80);
+    }
+    }
+
+async function createLeague() {
+
+    const input =
+        document.getElementById('new-league-name');
+
+    const leagueName =
+        input.value.trim();
+
+    if (!leagueName) {
+        showToast('Enter a league name');
+        return;
+    }
+
+    try {
+
+        const token =
+            localStorage.getItem('token') ||
+            localStorage.getItem('wc2026_token');
+
+        const response = await fetch(
+            'http://localhost:5000/api/leagues/create',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    name: leagueName
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message);
+        }
+
+        await loadMyLeagues();
+
+        activeLeagueId = result.data.league.id;
+
+const createdLeague = myLeagues.find(
+    l => l.id === activeLeagueId
+);
+
+if (createdLeague) {
+    await renderLeaderboard(activeLeagueId);
+}
+        showToast('League created successfully');
+
+        document.getElementById('create-panel')
+            .style.display = 'none';
+
+        input.value = '';
+
+    } catch (err) {
+
+        console.error(err);
+
+        showToast(err.message);
+    }
+}
+  async function joinLeague() {
+
+    const input =
+        document.getElementById('invite-code-input');
+
+    const code =
+        input ? input.value.trim().toUpperCase() : '';
+
+    if (!code) {
+        showToast('Enter an invite code');
+        return;
+    }
+
+    const token =
+        localStorage.getItem('token') ||
+        localStorage.getItem('wc2026_token');
+
+    try {
+
+        const response = await fetch(
+            'http://localhost:5000/api/leagues/join',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    invite_code: code
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message);
+        }
+
+        await loadMyLeagues();
+
+        const joinedLeague =
+            myLeagues.find(l => l.code === code);
+
+        if (joinedLeague) {
+
+            activeLeagueId =
+                joinedLeague.id;
+
+            renderLeagueList();
+            renderLeaderboard(joinedLeague.id);
+        }
+
+        input.value = '';
+
+        showToast('✅ League joined successfully!');
+
+    } catch (err) {
+
+        console.error(err);
+
+        showToast(err.message);
+    }
+}
+    function copyCode(code) {
+    navigator.clipboard?.writeText(code).catch(()=>{});
+    showToast(`📋 ${code} copied to clipboard!`);
+    }
+
+    // =====================================================
+    // LIVE RENDER
+    // =====================================================
+    function renderLive() {
+
+    // EMPTY PLAYERS STATE
+    if (MY_SQUAD.length === 0) {
+
+        document.getElementById('live-total-pts').textContent = '0';
+        document.getElementById('live-rank').textContent = '-';
+        document.getElementById('live-avg').textContent = '-';
+        document.getElementById('live-playing').textContent = '0/11';
+
+        document.getElementById('match-ticker').innerHTML = `
+        <div style="color:var(--wc-gray);font-size:12px">
+            No live matches
+        </div>
+        `;
+
+        document.getElementById('live-players-list').innerHTML = `
+        <div style="padding:40px;text-align:center;color:var(--wc-gray)">
+            No players added yet
+        </div>
+        `;
+
+        return;
+    }
+
+    let total = 0;
+
+    MY_SQUAD.forEach(p => {
+        const gp = GW_POINTS[p.id];
+        if (!gp) return;
+        if (p.starter) total += p.captain ? gp.pts * 2 : gp.pts;
+    });
+
+    document.getElementById('live-total-pts').textContent = total;
+    document.getElementById('live-rank').textContent = '52,104';
+    document.getElementById('live-avg').textContent = '61';
+
+    const playing = MY_SQUAD.filter(
+        p => p.starter && GW_POINTS[p.id]?.mins > 0
+    ).length;
+
+    document.getElementById('live-playing').textContent = `${playing}/11`;
+
+    if (MATCHES.length === 0) {
+
+    document.getElementById('match-ticker').innerHTML = `
+        <div style="color:var(--wc-gray);font-size:12px">
+        No live matches
+        </div>
+    `;
+
+    } else {
+
+    document.getElementById('match-ticker').innerHTML = MATCHES.map(m => `
+        <div class="match-card">
+        <div class="match-teams">${m.home}</div>
+
+        <div style="text-align:center">
+            <div class="match-score">${m.hs} – ${m.as}</div>
+
+            <div class="match-status ${
+            m.status==='FT'
+                ? 'status-ft'
+                : m.status.match(/^\d/)
+                ? 'status-ns'
+                : 'status-live'
+            }">
+
+            ${m.status==='LIVE' ? `${m.min}'` : m.status}
+
+            </div>
+        </div>
+
+        <div class="match-teams" style="text-align:right">
+            ${m.away}
+        </div>
+        </div>
+    `).join('');
+
+    }
+
+    const starters = MY_SQUAD.filter(p => p.starter);
+    const bench = MY_SQUAD.filter(p => !p.starter);
+
+    let html = `<div class="section-divider">Starting XI</div>`;
+
+    starters.forEach(p => {
+        html += buildLiveRow(p);
+    });
+
+    html += `<div class="section-divider">Bench</div>`;
+
+    bench.forEach(p => {
+        html += buildLiveRow(p, true);
+    });
+
+    document.getElementById('live-players-list').innerHTML = html;
+    }
+    function buildLiveRow(p, isBench) {
+    const gp = GW_POINTS[p.id] || { mins:0, goals:0, assists:0, cs:0, yc:0, bonus:0, pts:0 };
+    const finalPts = p.captain ? gp.pts * 2 : gp.pts;
+    const chips = [];
+    if (gp.goals   > 0) chips.push(`<span class="pb-chip goal">⚽ ${gp.goals}G</span>`);
+    if (gp.assists > 0) chips.push(`<span class="pb-chip assist">🅰️ ${gp.assists}A</span>`);
+    if (gp.cs) chips.push(`<span class="pb-chip cs">🧱 CS</span>`);
+    if (gp.yc) chips.push(`<span class="pb-chip yc">🟨 YC</span>`);
+    return `
+        <div class="live-player-row ${p.captain?'captain-row':''} ${isBench?'bench-row':''}">
+        <div class="lpr-info">
+            <div class="lpr-avatar">${p.emoji}</div>
+            <div>
+            <div class="lpr-name">${p.name}${p.captain?'<span class="lpr-cap">C</span>':''}</div>
+            <div class="lpr-sub">${p.team} · ${p.pos}</div>
+            <div class="points-breakdown">${chips.join('')}</div>
+            </div>
+        </div>
+        <div class="lpr-cell">${gp.mins > 0 ? gp.mins+"'" : '—'}</div>
+        <div class="lpr-cell">${gp.bonus > 0 ? '+'+gp.bonus : '—'}</div>
+        <div class="lpr-cell">${gp.apps > 0 ? '▶' : '—'}</div>
+        <div class="lpr-cell">$${p.price}m</div>
+        <div class="lpr-cell pts-cell ${p.captain?'is-cap':''}">${finalPts}</div>
+        </div>`;
+    }
+
+    // =====================================================
+    // GAMEWEEK RENDER
+    // =====================================================
+    function renderGameweek() {
+    const steps = ['done','done','active','','',''];
+    document.getElementById('gw-timeline').innerHTML = steps.map(s => `<div class="gw-step ${s}"></div>`).join('');
+    if (GW_FIXTURES.length === 0) {
+
+    document.getElementById('gw-fixtures').innerHTML = `
+        <div style="padding:20px;color:var(--wc-gray)">
+        No fixtures available
+        </div>
+    `;
+
+    return;
+    }
+    document.getElementById('gw-fixtures').innerHTML = GW_FIXTURES.map(f => `
+        <div class="gw-match ${f.live?'gw-match-live':''}">
+        <div class="gm-team">${f.home}</div>
+        <div style="text-align:center">
+            <div class="gm-score">${f.hs} – ${f.as}</div>
+            <div class="gm-time ${f.live?'gm-live':''}">${f.live?'● LIVE ':''} ${f.day} · ${f.status}</div>
+        </div>
+        <div class="gm-team right">${f.away}</div>
+        </div>`).join('');
+    if (TRANSFERS.length === 0) {
+
+    document.getElementById('transfer-history').innerHTML = `
+        <div style="color:var(--wc-gray)">
+        No transfers made
+        </div>
+    `;
+
+    } else {
+    document.getElementById('transfer-history').innerHTML = TRANSFERS.length === 0
+        ? '<div style="color:var(--wc-gray);font-size:13px;padding:8px 0">No transfers made this gameweek.</div>'
+        : TRANSFERS.map(t => `
+        <div class="transfer-row">
+        <div class="transfer-out">
+            <div class="t-avatar">${t.out.emoji}</div>
+            <div>
+            <div class="t-name" style="color:rgba(200,16,46,0.9)">${t.out.name}</div>
+            <div class="t-price">$${t.out.price}m · ${t.out.team}</div>
+            </div>
+        </div>
+        <div class="transfer-arrow">→</div>
+        <div class="transfer-in">
+            <div>
+            <div class="t-name" style="color:#22C55E;text-align:right">${t.inn.name}</div>
+            <div class="t-price" style="text-align:right">$${t.inn.price}m · ${t.inn.team}</div>
+            </div>
+            <div class="t-avatar">${t.inn.emoji}</div>
+        </div>
+        ${t.penalty ? '<div class="t-penalty" style="white-space:nowrap">-4 pts</div>' : ''}
+        </div>`).join('');
+
+    startCountdown();
+    }
+    }
+    let countdownInterval = null;
+    function startCountdown() {
+    let secs = 2 * 3600 + 14 * 60 + 38;
+    if (countdownInterval) clearInterval(countdownInterval);
+    countdownInterval = setInterval(() => {
+        if (secs <= 0) { clearInterval(countdownInterval); const el = document.getElementById('lock-countdown'); if(el) el.textContent='LOCKED'; return; }
+        secs--;
+        const h = Math.floor(secs/3600).toString().padStart(2,'0');
+        const m = Math.floor((secs%3600)/60).toString().padStart(2,'0');
+        const s = (secs%60).toString().padStart(2,'0');
+        const el = document.getElementById('lock-countdown');
+        if (el) el.textContent = `${h}:${m}:${s}`;
+    }, 1000);
+    }
+
+    // =====================================================
+    // NAVIGATION
+    // =====================================================
+      async function loadLeagueLeaderboard(leagueId) {
+
+    const token =
+        localStorage.getItem('token') ||
+        localStorage.getItem('wc2026_token');
+
+    const response = await fetch(
+        `http://localhost:5000/api/leagues/${leagueId}/leaderboard`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    const result = await response.json();
+
+    return result.data;
+}
+
+    function goToPage(page) {
+
+    document.querySelectorAll('.page')
+        .forEach(p => p.classList.remove('active'));
+
+    document.getElementById(`page-${page}`)
+        .classList.add('active');
+
+    if (page === 'leagues') {
+        loadMyLeagues();
+    }
+  
+    window.scrollTo(0,0);
+
+    if (page === 'live')
+        renderLive();
+
+    if (page === 'gameweek')
+        renderGameweek();
+
+    if (page === 'leagues') {
+        renderLeagueList();
+        renderLeaderboard(activeLeagueId);
+    }
+}
+
+    // =====================================================
+    // TOAST
+    // =====================================================
+    function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(window._tt);
+    window._tt = setTimeout(() => t.classList.remove('show'), 2800);
+    }
+    </script>
+    </body>
+    </html>

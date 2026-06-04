@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIFA World Cup 2026 — Fantasy Football</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── Substitution styles ── */
+    .sub-btn {
+      display: block;
+      margin: 4px auto 0;
+      background: rgba(0,180,216,0.15);
+      border: 1px solid rgba(0,180,216,0.4);
+      border-radius: 12px;
+      color: var(--wc-teal);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 10px;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: all 0.15s;
+    }
+    .sub-btn:hover { background: rgba(0,180,216,0.3); }
+
+    .save-slot.sub-source,
+    .bench-card.sub-source {
+      outline: 2px solid var(--wc-gold);
+      border-radius: 8px;
+      background: rgba(245,166,35,0.1);
+    }
+    .save-slot.sub-target,
+    .bench-card.sub-target {
+      outline: 2px dashed var(--wc-teal);
+      border-radius: 8px;
+      cursor: pointer;
+      background: rgba(0,180,216,0.08);
+      animation: pulse-target 1.2s ease-in-out infinite;
+    }
+    @keyframes pulse-target {
+      0%,100% { outline-color: var(--wc-teal); }
+      50%      { outline-color: var(--wc-teal-bright); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- =====================================================
+     OVERVIEW PAGE
+     ===================================================== -->
+<div id="page-overview" class="page active">
+
+  <div class="topbar">
+    <a href="#">FIFA.com</a>
+    <a href="#">Help</a>
+    <!-- No login button — auth handled by auth.html -->
+  </div>
+
+  <nav class="navbar">
+    <a class="logo" href="#">
+      <div class="logo-badge">⚽<br>FIFA</div>
+      <div class="logo-text">
+        <strong>World Cup</strong>
+        <span>Fantasy 2026</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <span class="nav-link" onclick="showToast('Fixtures coming soon')">Matches</span>
+      <span class="nav-link" onclick="showToast('Table coming soon')">Table</span>
+      <span class="nav-link" onclick="showToast('Groups coming soon')">Groups</span>
+      <span class="nav-link nav-pill">Fantasy ▾</span>
+      <span class="nav-link" onclick="showToast('Stats coming soon')">Stats</span>
+      <span class="nav-link" onclick="showToast('Teams coming soon')">Teams</span>
+      <span class="nav-link" onclick="showToast('News coming soon')">News</span>
+    </div>
+  </nav>
+
+  <div class="subheader">
+    <div class="subheader-left">
+      <span class="breadcrumb">← All games</span>
+      <h1>Fantasy Football</h1>
+    </div>
+    <div class="subheader-right sponsored-by">
+      <span>Presented by</span>
+      <span style="color:var(--wc-gold);font-weight:700">FIFA+</span>
+    </div>
+  </div>
+
+  <div class="overview-hero">
+    <div class="hero-trophy">🏆</div>
+    <h1>FIFA World Cup<br><span>2026 Fantasy</span></h1>
+    <p>Pick your dream 15-player squad, set your captain, and compete globally across 48 nations.</p>
+    <!-- id="overview-cta-btn" — text/action set dynamically by app.js updateOverviewCTA() -->
+    <button type="button" id="overview-cta-btn" class="hero-cta" onclick="goToPage('create-team')">
+      Create Team
+    </button>
+  </div>
+
+  <div class="overview-stats">
+    <div class="stat-block"><div class="num">2.4M</div><div class="lbl">Players</div></div>
+    <div class="stat-block"><div class="num">48</div><div class="lbl">Nations</div></div>
+    <div class="stat-block"><div class="num">1,000+</div><div class="lbl">Players Available</div></div>
+    <div class="stat-block"><div class="num">$1M</div><div class="lbl">Prize Pool</div></div>
+    <div class="stat-block"><div class="num">64</div><div class="lbl">Matches</div></div>
+  </div>
+
+  <div class="overview-info">
+    <div class="info-card">
+      <div class="icon">👥</div>
+      <h3>Pick Your Squad</h3>
+      <p>Choose 15 players — 2 GK, 5 DEF, 5 MID, 3 FWD — within a $100m budget. Each matchday your 11-man XI earns points.</p>
+    </div>
+    <div class="info-card">
+      <div class="icon">⭐</div>
+      <h3>Captain &amp; Vice</h3>
+      <p>Pick a captain each matchday to double their score. Set a vice-captain as backup in case your captain doesn't play.</p>
+    </div>
+    <div class="info-card">
+      <div class="icon">🔄</div>
+      <h3>Transfers</h3>
+      <p>Unlimited free transfers between matchdays. Use the Wildcard to overhaul your squad — once per group stage.</p>
+    </div>
+  </div>
+
+  <div style="flex:1"></div>
+
+  <footer class="site-footer">
+    <div class="footer-col">
+      <div class="footer-logo">
+        <div class="logo-badge" style="width:48px;height:48px;font-size:14px">⚽<br>FIFA</div>
+        <div style="margin-left:8px">
+          <div style="font-family:var(--font-display);font-weight:800;font-size:16px;letter-spacing:1px">WORLD CUP</div>
+          <div style="font-size:11px;color:var(--wc-gold);letter-spacing:2px">FANTASY 2026</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <a href="#">Matches</a><a href="#">Groups</a><a href="#">Stats</a>
+      <a href="#">Teams</a><a href="#">News</a>
+    </div>
+    <div class="footer-col">
+      <h4>Fantasy</h4>
+      <a href="#" onclick="goToPage('create-team');return false">Create Team</a>
+      <a href="#">Leagues</a><a href="#">Prizes</a>
+      <a href="#">How to Play</a><a href="#">Rules</a>
+    </div>
+    <div class="footer-col">
+      <h4>Language</h4>
+      <button class="lang-btn">🌐 English ▾</button>
+    </div>
+  </footer>
+
+  <div class="footer-bottom">
+    <span>© 2026 FIFA. All rights reserved.</span>
+    <span style="display:flex;gap:16px">
+      <a href="#" style="color:inherit;text-decoration:none">Privacy</a>
+      <a href="#" style="color:inherit;text-decoration:none">Terms</a>
+      <a href="#" style="color:inherit;text-decoration:none">Cookies</a>
+    </span>
+  </div>
+
+</div><!-- /page-overview -->
+
+
+<!-- =====================================================
+     CREATE TEAM PAGE
+     ===================================================== -->
+<div id="page-create-team" class="page">
+
+  <!-- No topbar login button -->
+  <div class="topbar">
+    <a href="#">FIFA.com</a>
+  </div>
+
+  <nav class="navbar">
+    <a class="logo" href="#" onclick="goToPage('overview');return false">
+      <div class="logo-badge">⚽<br>FIFA</div>
+      <div class="logo-text"><strong>World Cup</strong><span>Fantasy 2026</span></div>
+    </a>
+    <div class="nav-links">
+      <span class="nav-link" onclick="goToPage('overview')">← Overview</span>
+      <span class="nav-link nav-pill">Fantasy ▾</span>
+    </div>
+  </nav>
+
+  <div class="subheader">
+    <div class="subheader-left">
+      <span class="breadcrumb" onclick="goToPage('overview')">← All games</span>
+      <h1>Create Team</h1>
+    </div>
+    <div class="subheader-right">FIFA World Cup 2026</div>
+  </div>
+
+  <div class="create-team-layout">
+
+    <!-- LEFT: Pitch -->
+    <div class="pitch-section">
+      <div class="pitch-tip">TIP: <span>Auto-fill your squad</span> — then fine-tune before the first kick-off</div>
+
+      <div class="pitch-wrapper">
+        <div class="pitch">
+          <div class="pitch-field">
+            <div class="pitch-lines"></div>
+            <div class="pitch-center-line"></div>
+            <div class="pitch-center-circle"></div>
+            <div class="pitch-box-top"></div>
+            <div class="pitch-box-bot"></div>
+            <div class="pitch-goal-top"></div>
+            <div class="pitch-goal-bot"></div>
+          </div>
+          <div class="pitch-positions" id="pitch-positions"></div>
+        </div>
+      </div>
+
+      <div class="pitch-footer">
+        <div class="footer-stat">
+          <div class="lbl">Players</div>
+          <div class="val" id="players-count">0<span>/15</span></div>
+        </div>
+        <div class="footer-stat">
+          <div class="lbl">Remaining</div>
+          <div class="val" id="budget-remaining">$100m</div>
+        </div>
+        <button class="footer-continue" id="continue-btn" onclick="tryGoToCaptain()">Continue</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Player Panel -->
+    <div class="player-panel">
+      <div class="panel-filters">
+        <select class="filter-select" id="filter-pos" onchange="applyFilters()">
+          <option value="All">Position: All</option>
+          <option value="GK">GK</option>
+          <option value="DEF">DEF</option>
+          <option value="MID">MID</option>
+          <option value="FWD">FWD</option>
+        </select>
+        <select class="filter-select" id="filter-team" onchange="applyFilters()">
+          <option value="All">Team: All</option>
+        </select>
+        <select class="filter-select" id="filter-price" onchange="applyFilters()">
+          <option value="All">Price: Max</option>
+          <option value="13">$13m</option>
+          <option value="10">$10m</option>
+          <option value="8">$8m</option>
+          <option value="6">$6m</option>
+        </select>
+        <button class="search-btn" onclick="showToast('Search coming soon')">🔍</button>
+      </div>
+
+      <div class="panel-table-header">
+        <div class="th">Players</div>
+        <div class="th" onclick="sortBy('price')">Price
+          <svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0L9 5H1L5 0z" opacity=".5"/><path d="M5 12L1 7H9L5 12z" opacity=".5"/></svg>
+        </div>
+        <div class="th sorted" onclick="sortBy('pts')">Total pts
+          <svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0L9 5H1L5 0z"/><path d="M5 12L1 7H9L5 12z" opacity=".3"/></svg>
+        </div>
+        <div class="th" onclick="sortBy('selected')">Sel%
+          <svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0L9 5H1L5 0z" opacity=".5"/><path d="M5 12L1 7H9L5 12z" opacity=".5"/></svg>
+        </div>
+        <div class="th" onclick="sortBy('md')">MD pts
+          <svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0L9 5H1L5 0z" opacity=".5"/><path d="M5 12L1 7H9L5 12z" opacity=".5"/></svg>
+        </div>
+        <div class="th" onclick="sortBy('ppm')">Pts/$m
+          <svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0L9 5H1L5 0z" opacity=".5"/><path d="M5 12L1 7H9L5 12z" opacity=".5"/></svg>
+        </div>
+      </div>
+
+      <div class="player-list" id="player-list"></div>
+    </div>
+
+  </div>
+</div><!-- /page-create-team -->
+
+
+<!-- =====================================================
+     CAPTAIN PAGE
+     ===================================================== -->
+<div id="page-captain" class="page">
+
+  <div class="topbar"><a href="#">FIFA.com</a></div>
+
+  <nav class="navbar">
+    <a class="logo" href="#" onclick="goToPage('overview');return false">
+      <div class="logo-badge">⚽<br>FIFA</div>
+      <div class="logo-text"><strong>World Cup</strong><span>Fantasy 2026</span></div>
+    </a>
+    <div class="nav-links">
+      <span class="nav-link" onclick="goToPage('create-team')">← Back</span>
+      <span class="nav-link nav-pill">Fantasy ▾</span>
+    </div>
+  </nav>
+
+  <div class="subheader">
+    <div class="subheader-left">
+      <span class="breadcrumb" onclick="goToPage('create-team')">← Create team</span>
+      <h1>Select Captain</h1>
+    </div>
+  </div>
+
+  <div class="captain-page">
+    <div class="captain-tip">Each matchday, pick a captain whose score will be <span>doubled ⓘ</span></div>
+    <div class="captain-pitch">
+      <div class="captain-rows" id="captain-rows"></div>
+    </div>
+    <div class="captain-continue-wrap">
+      <button class="btn-primary" onclick="tryGoToSave()">Continue</button>
+    </div>
+  </div>
+
+</div><!-- /page-captain -->
+
+
+<!-- =====================================================
+     SAVE TEAM PAGE
+     ===================================================== -->
+<div id="page-save" class="page">
+
+  <div class="topbar"><a href="#">FIFA.com</a></div>
+
+  <nav class="navbar">
+    <a class="logo" href="#" onclick="goToPage('overview');return false">
+      <div class="logo-badge">⚽<br>FIFA</div>
+      <div class="logo-text"><strong>World Cup</strong><span>Fantasy 2026</span></div>
+    </a>
+    <div class="nav-links">
+      <span class="nav-link" onclick="goToPage('captain')">← Back</span>
+      <span class="nav-link nav-pill">Fantasy ▾</span>
+    </div>
+  </nav>
+
+  <div class="subheader">
+    <div class="subheader-left">
+      <span class="breadcrumb" onclick="goToPage('captain')">← Select captain</span>
+      <h1>Save Team</h1>
+    </div>
+  </div>
+
+  <div class="save-page">
+    <div class="save-pitch-full">
+      <div class="save-rows" id="save-rows"></div>
+    </div>
+
+    <div class="bench-section">
+      <div class="bench-title">Bench</div>
+      <div class="bench-row" id="bench-row"></div>
+    </div>
+
+    <div class="save-btn-wrap">
+      <button class="save-team-btn" onclick="saveTeam()">Save team</button>
+    </div>
+  </div>
+
+</div><!-- /page-save -->
+
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast"></div>
+
+<!-- ===== SCRIPTS ===== -->
+<script src="api.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

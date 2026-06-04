@@ -1,0 +1,45 @@
+function generateLeaderboard(total, myPos) {
+  const namePool = [
+    ['Raj Sharma','The Invincibles'],['Priya M','GOAT XI'],['Ahmed K','Desert Storm'],
+    ['Carlos V','El Clasico XI'],['Liu Wei','Dragon FC'],['Tom B','Three Lions'],
+    ['Sara L',"Queen's XI"],['Kenji T','Samurai Blue'],['Ivan P','Bear Squad'],
+    ['Amara D','African Kings'],['Mei F','Phoenix FC'],['Omar A','Desert Eagles'],
+    ['Pedro S','Samba FC'],['Anne W','Nordic Stars'],['Yuki N','Rising Sun FC']
+  ];
+  const moves = ['▲2','▼1','—','▲4','▼2','▲1','—','▲3','▼1','▲1','▼3','—','▲2','▼4','▲1'];
+  const displayCount = Math.min(total, 15);
+  const rows = [];
+  for (let i = 0; i < displayCount; i++) {
+    const isMe = (i + 1 === myPos);
+    const nm = namePool[i % namePool.length];
+    const pts = Math.round(250 - i * 3 + (Math.random() * 4 - 2));
+    const gw  = Math.round(80 - i * 1.5 + (Math.random() * 6 - 3));
+    rows.push({ rank: i+1, name: isMe ? 'YOU' : nm[0], teamName: isMe ? 'My Fantasy XI' : nm[1], pts, gw, move: moves[i % moves.length], isMe });
+  }
+  if (myPos > displayCount) {
+    rows.push({ rank: myPos, name: 'YOU', teamName: 'My Fantasy XI', pts: 218, gw: 74, move: '▲12', isMe: true, separator: true });
+  }
+  return rows;
+}
+
+function generatePrivateLeaderboard(memberCount, myRank) {
+  const namePool = [
+    ['Arjun S','Team Alpha'],['Neha R','Star XI'],['Vikram P','Lions FC'],
+    ['Sunita M','Phoenix'],['Rahul K','El Diablo'],['Pooja T','Warriors'],
+    ['Dev B','Titans'],['Isha G','Eagles'],['Raj N','Sharks'],['Meera L','Blazers']
+  ];
+  const moves = ['▲1','▼2','—','▲3','▼1','▲2'];
+  const rows = [];
+  for (let i = 0; i < memberCount; i++) {
+    const isMe = (i + 1 === myRank);
+    const nm = namePool[i % namePool.length];
+    const pts = Math.round(230 - i * 8 + (Math.random() * 6 - 3));
+    const gw  = Math.round(78 - i * 4 + (Math.random() * 6 - 3));
+    rows.push({ rank: i+1, name: isMe ? 'YOU' : nm[0], teamName: isMe ? 'My Fantasy XI' : nm[1], pts, gw, move: moves[i % moves.length], isMe });
+  }
+  return rows;
+}
+
+function genCode() {
+  return 'WC-' + Math.random().toString(36).substr(2,4).toUpperCase();
+}
