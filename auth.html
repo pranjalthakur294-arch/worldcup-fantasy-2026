@@ -1136,13 +1136,9 @@ function showForgot(e) {
    - Replace clearUserSession with calling POST /api/auth/logout
    ===================================================== */
 function saveUserSession(user) {
-  // In production: store the JWT token returned by your backend
-  // e.g. localStorage.setItem('wc_token', response.token)
-  // Here we store user data directly (no real auth)
-  localStorage.setItem('wc2026_user', JSON.stringify(data.user));
+  localStorage.setItem('wc2026_user', JSON.stringify(user));
   localStorage.setItem('wc_squad', JSON.stringify(user.squad || []));
 }
-
 function loadUserSession() {
   try { return JSON.parse(localStorage.getItem('wc_user')); } catch(e) { return null; }
 }
