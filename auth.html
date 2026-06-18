@@ -1074,7 +1074,7 @@ function clearResendTimer() {
 /* =====================================================
    SIGNUP — STEP 3: Finish
    ===================================================== */
-function finishSignup() {
+async function finishSignup() {
   const btn = document.getElementById('finish-btn');
   const msg = document.getElementById('s3-msg');
   clearMsg(msg);
@@ -1094,11 +1094,23 @@ function finishSignup() {
   };
 
   // TODO: POST /api/auth/register  fullData  → returns { token, user }
-  setTimeout(() => {
-    setLoading(btn, false);
-    saveUserSession({ email: fullData.email, name: fullData.fname, teamName: fullData.team, squad: [] });
-    showSuccessScreen(fullData.fname);
-  }, 1400);
+  try {
+  const result = await registerUser(
+    fullData.fname,
+    fullData.email,
+    fullData.pwd
+  );
+
+  setLoading(btn, false);
+
+  showToast('✅ Account created');
+
+  showSuccessScreen(result.user.username);
+
+} catch (err) {
+  setLoading(btn, false);
+  showMsg(msg, 'error', err.message);
+}
 }
 
 /* =====================================================
