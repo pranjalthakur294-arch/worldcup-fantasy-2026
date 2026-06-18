@@ -56,11 +56,6 @@ app.use('/api/players', playerRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/leagues', leagueRoutes);
 
-// ------------------------------------------------
-// HEALTH CHECK ROUTE
-// Visit http://localhost:5000/api/health to confirm
-// the server is running correctly
-// ------------------------------------------------
 app.get('/api/health', (req, res) => {
   res.json({
     status:  'OK',

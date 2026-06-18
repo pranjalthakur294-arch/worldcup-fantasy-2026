@@ -641,7 +641,7 @@
     try {
 
         const response = await fetch(
-            'http://localhost:5000/api/leagues/my',
+            'https://worldcup-fantasy-2026-api.onrender.com/api/leagues/my',
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -1029,7 +1029,7 @@ async function createLeague() {
             localStorage.getItem('wc2026_token');
 
         const response = await fetch(
-            'http://localhost:5000/api/leagues/create',
+            'https://worldcup-fantasy-2026-api.onrender.com/api/leagues/create',
             {
                 method: 'POST',
                 headers: {
@@ -1093,7 +1093,7 @@ if (createdLeague) {
     try {
 
         const response = await fetch(
-            'http://localhost:5000/api/leagues/join',
+            'https://worldcup-fantasy-2026-api.onrender.com/api/leagues/join',
             {
                 method: 'POST',
                 headers: {
@@ -1353,7 +1353,7 @@ if (createdLeague) {
         localStorage.getItem('wc2026_token');
 
     const response = await fetch(
-        `http://localhost:5000/api/leagues/${leagueId}/leaderboard`,
+        `https://worldcup-fantasy-2026-api.onrender.com/api/leagues/${leagueId}/leaderboard`,
         {
             headers: {
                 Authorization: `Bearer ${token}`

@@ -5,7 +5,7 @@
 
 async function loadPlayers() {
   try {
-    const response = await fetch('http://localhost:5000/api/players');
+    const response = await fetch('https://worldcup-fantasy-2026-api.onrender.com/api/players');
     const result = await response.json();
     PLAYERS = result.data.map(p => ({
       ...p,

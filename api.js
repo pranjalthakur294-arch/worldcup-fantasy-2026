@@ -23,7 +23,7 @@
 
 // ── CONFIGURATION ────────────────────────────────────────────
 // Change this if your backend runs on a different port or host
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = 'https://worldcup-fantasy-2026-api.onrender.com';
 
 // ============================================================
 // AUTH HELPERS
